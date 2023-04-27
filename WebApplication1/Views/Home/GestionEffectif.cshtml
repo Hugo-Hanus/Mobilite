@@ -1,0 +1,80 @@
+﻿@{
+Layout = "_Layout";  
+ViewData["Title"] = "Gestion des effectifs";
+}
+<div class="container">
+<h1 class="display-4 me-4">Gestion des Effectifs:</h1>
+<h2>Gestion des Permis</h2>
+<div class="mb-5">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">Prénom Nom</th>
+        <th scope="col">Permis B</th>
+        <th scope="col">Permis C</th>
+        <th scope="col">Permis CE</th>
+        <th scope="col">Controle</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row">Jean Paul</th>
+        <td><input class="form-check-input" type="checkbox" value="B" id="permisB"><label class="form-check-label ms-3" for="permisB">Permis B</label></td>
+        <td><input class="form-check-input" type="checkbox" value="C" id="permisC"><label class="form-check-label ms-3" for="permisC">Permis C</label></td>
+        <td><input class="form-check-input" type="checkbox" value="CE" id="permisCE"><label class="form-check-label ms-3" for="permisCE">Permis CE</label></td>
+        <td><a class="btn btn-secondary btn-sm">Modifier</a></td>
+      </tr>
+      <tr>
+        <th scope="row">Jean Marie</th>
+        <td><input class="form-check-input" type="checkbox" value="B" id="permisB"><label class="form-check-label ms-3" for="permisB">Permis B</label></td>
+        <td><input class="form-check-input" type="checkbox" value="C" id="permisC"><label class="form-check-label ms-3" for="permisC">Permis C</label></td>
+        <td><input class="form-check-input" type="checkbox" value="CE" id="permisCE"><label class="form-check-label ms-3" for="permisCE">Permis CE</label></td>
+        <td><a class="btn btn-secondary btn-sm">Modifier</a></td>
+      </tr>
+      <tr>
+        <th scope="row">Jean Michel</th>
+        <td><input class="form-check-input" type="checkbox" value="B" id="permisB"><label class="form-check-label ms-3" for="permisB">Permis B</label></td>
+        <td><input class="form-check-input" type="checkbox" value="C" id="permisC"><label class="form-check-label ms-3" for="permisC">Permis C</label></td>
+        <td><input class="form-check-input" type="checkbox" value="CE" id="permisCE"><label class="form-check-label ms-3" for="permisCE">Permis CE</label></td>
+        <td><a class="btn btn-secondary btn-sm">Modifier</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr class="hr hr-blurry mb-5" />
+  <h2>Gestion des Camions</h2>
+  <a class="btn btn-success mb-3" asp-controller="Home" asp-action="AjouterCamion">Ajouter un camion</a>
+  <div class="mb-5">
+        <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <p class="fw-bold mb-0">1-EFRE-12</p>
+                <p class="mb-0">Volkswagen Transporter 30T</p>
+            </div>
+            <div>
+                <a class="btn btn-secondary" asp-controller="Home" asp-action="">Mofidier</a>
+                <a class="btn btn-danger" asp-controller="Home" asp-action="">Supprimer</a>
+            </div>
+        </li>
+       <li class="list-group-item d-flex justify-content-between align-items-center">
+           <div>
+               <p class="fw-bold mb-0">1-0Z2RFG-12</p>
+               <p class="mb-0">Volkswagen Transporter 30T</p>
+               </div>
+           <div>
+               <a class="btn btn-secondary" asp-controller="Home" asp-action="">Mofidier</a>
+               <a class="btn btn-danger" asp-controller="Home" asp-action="">Supprimer</a>
+               </div>
+           </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <p class="fw-bold mb-0">1-FGEEH-02</p>
+            <p class="mb-0">Volkswagen Transporter 30T</p>
+            </div>
+        <div>
+            <a class="btn btn-secondary" asp-controller="Home" asp-action="">Mofidier</a>
+            <a class="btn btn-danger" asp-controller="Home" asp-action="">Supprimer</a>
+            </div>
+    </ul>
+        </div>
+</div>

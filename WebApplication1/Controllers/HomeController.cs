@@ -15,36 +15,70 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return PartialView();
     }
 
     public IActionResult Privacy()
     {
-        return View();
+        return PartialView();
     }
     public IActionResult InscriptionClient()
     {
-        return View();
+        return PartialView();
     }
     public IActionResult InscriptionMembre()
     {
-        return View();
+        return PartialView();
     }
     public IActionResult Connexion()
     {
-        return View();
+        return PartialView();
     }
     public IActionResult Livraison()
     {
-        return View();
+        return PartialView();
     }
     public IActionResult Dispatch()
     {
-        return View();
+        return PartialView();
     }public IActionResult GererLivraison()
     {
-        return View();
+        return PartialView();
     }
+    
+    public IActionResult CreerLivraison()
+    {
+        return PartialView();
+    }
+    public IActionResult LivraisonDispatch()
+    {
+        return PartialView();
+    }
+    public IActionResult ValiderLivraison()
+    {
+        return PartialView();
+    }
+    public IActionResult RaterLivraison()
+    {
+        return PartialView();
+    }
+    public IActionResult GestionEffectif()
+    {
+        return PartialView();
+    }
+    public IActionResult AjouterCamion()
+    {
+        return PartialView();
+    }
+    public IActionResult Clientliste()
+    {
+        return PartialView();
+    }
+    public IActionResult Statistique()
+    {
+        return PartialView();
+    }
+    
 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

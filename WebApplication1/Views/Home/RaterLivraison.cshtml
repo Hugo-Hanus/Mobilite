@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "_Layout";  
+    ViewData["Title"] = "Rater la Livraison";
+}
+<div class="container">
+    <h1 class="display-4 me-4">Rater la Livraison XX:</h1>
+    <form>
+        <div class="form-check mb-4">
+          <label class="form-check-label"> Choissisez votre raison</label>
+            <div><input class="form-check-input" type="radio" name ="raisonRaterLivraison" value="Maladie" id="maladie"><label class="form-check-label ms-3" for="maladie">Maladie</label></div>
+            <div><input class="form-check-input" type="radio" name ="raisonRaterLivraison" value="Accident" id="accident"><label class="form-check-label ms-3" for="accident">Accident</label></div>
+            <div><input class="form-check-input" type="radio" name ="raisonRaterLivraison" value="Livraison impossible" id="impossible"><label class="form-check-label ms-3" for="impossible">Client absent / Livraison Impossible</label></div>  
+        </div>
+        <button class="btn btn-warning" type="submit">Valider la non livraison</button>
+    </form>
+</div>

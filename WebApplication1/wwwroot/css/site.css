@@ -16,8 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
-
-
+/*Switch Red*/
+.form-check-input:checked {
+  background-color: red;
+  border-color: red;
+}
 /*Drop down Button*/
 
 .dropdown{

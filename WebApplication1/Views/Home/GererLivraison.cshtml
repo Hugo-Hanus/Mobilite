@@ -1,15 +1,24 @@
 ﻿@{
+    Layout = "_Layout";  
     ViewData["Title"] = "Gérer la livraison ";
 }
 <div class="container">
-    <h1 class="display-4 me-4">Gérer la Livraison XX</h1>
-    <h2> Chauffeur</h2>
-    <div id="formChauffeurCamion">
+    <h1 class="display-4 me-4">Gérer la Livraison XX:</h1>
+    <h2>Chauffeur</h2>
+    <form>
+    <div class="mb-2" id="formChauffeur">
         <select class="form-select" id="chauffeurSelect" aria-label="Default select example">
-          <option selected>Choissisez un Chauffeur</option>
-          <option value="1">Jean</option>
-          <option value="2">Albert</option>
-          <option value="3">Thomas</option>
+            <option selected>Choissisez un Chauffeur</option>
+            <option value="1">Jean</option>
+            <option value="2">Albert</option>
+            <option value="3">Thomas</option>
         </select>
     </div>
+        <div id="formCamion">
+            <h2>Camion</h2>
+            <div id="camionShow">
+
+            </div>
+        </div>
+    </form>
 </div>
