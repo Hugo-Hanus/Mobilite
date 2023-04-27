@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Client Inscription";
+}
+
+<div class="container">
+    <h1 class="display-4">Inscription - Client</h1>
+  <form >
+    <div class="form-group mb-3">
+      <label for="entrepriseName">Nom de L'entreprise</label>
+      <input type="text" class="form-control" id="entrepriseName" placeholder="Nom de l'entreprise" >
+    </div>
+    <div class="form-group mb-3">
+      <label for="email">Adresse Mail</label>
+      <input type="email" class="form-control" id="mail" placeholder="Adresse mail">
+    </div>
+    <div class="form-group mb-3">
+      <label for="passwordUser">Mot de passe</label>
+      <input type="password" class="form-control" id="passwordUser" placeholder="Mot de passe">
+    </div>
+    <div class="form-group mb-3">
+      <label for="passwordUserConfirm">Confirmation du mot de passe</label>
+      <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe">
+    </div>
+    <div class="form-group mb-3">
+      <label for="adress">Adresse </label>
+      <div class="d-flex mb-3">
+        <input type="text" class="form-control" id="road" placeholder="Rue">
+        <input type="number" class="form-control" id="numberRoad" placeholder="Numéro">
+        <input type="number" class="form-control" id="postalCode" placeholder="Code Postal">
+      </div>
+      <div class="d-flex mb-3">
+        <input type="text" class="form-control" id="locality" placeholder="Localité">
+        <input type="text" class="form-control" id="country" placeholder="Pays">
+      </div>
+    </div>
+    <div class="d-grid mb-3" >
+      <label for="logo">Logo de l'entreprise</label>
+      <input type="file" class="form-control-file" id="logo">
+    </div>
+    <button type="submit" class="btn btn-primary">Confirmer</button>
+  </form>
+</div>
