@@ -10,7 +10,7 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(InstallationDbContext))]
-    [Migration("20230430090305_FirstMigration")]
+    [Migration("20230430185220_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -23,14 +23,13 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Camion", b =>
                 {
-                    b.Property<string>("ID")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("Img")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Immatriculation")
                         .IsRequired()
@@ -48,7 +47,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<int>("Tonnage")
-                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.Property<string>("Type")

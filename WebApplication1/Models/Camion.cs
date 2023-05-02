@@ -1,20 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models;
 
 public class Camion
 {
-    public Camion(string marque, string modèle, string immatriculation, string type, int tonnage, string img)
+    public Camion(string marque, string modèle, string immatriculation, string type, int tonnage)
     {
         this.Marque = marque;
         this.Modèle = modèle;
         this.Immatriculation = immatriculation;
         this.Type = type;
         this.Tonnage = tonnage;
-        this.Img = img;
     }
-    [Key][MaxLength(50)][Required]
-    public string ID { get; set; }
+
+    public Camion()
+    {
+        
+    }
+    
+    [Key][Required]
+    public int ID { get; set; } 
+    
     [Required][MaxLength(50)]
     public string Marque { get; set; }
     [Required][MaxLength(50)]
@@ -23,8 +30,8 @@ public class Camion
     public string Immatriculation { get; set; }
     [Required][MaxLength(2)]
     public string Type { get; set; }
-    [Required][MaxLength(10)]
+    [Required]
     public int Tonnage { get; set; }
-    [Required][MaxLength(50)]
+    [Required]
     public string Img { get; set; }
 }
