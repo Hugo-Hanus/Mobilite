@@ -9,4 +9,7 @@ public class InstallationDbContext : DbContext
   }
   
   public DbSet<Camion> Camions { get; set; }
+  public DbSet<Client> Clients { get; set; }
+  public DbSet<Dispatcher> Dispatchers { get; set; }
+  public DbSet<Chauffeur> Chauffeurs { get; set; }
 }
