@@ -19,7 +19,7 @@ if(selectRole!=null) {
                             <div><input class="form-check-input" type="checkbox" value="CESS" id="diplomeCess"><label class="form-check-label ms-3" for="diplomeCess">CESS</label></div>
                             <div><input class="form-check-input" type="checkbox" value="Bachelier" id="diplomeBachelier"><label class="form-check-label ms-3" for="diplomeBachelier">Bachelier</label></div>
                              <div><input class="form-check-input" type="checkbox" value="Licencier" id="diplomeLicencier"><label class="form-check-label ms-3" for="diplomeLicencier">Licencier</label></div>`;
-            divForm.appendChild(div);
+            divForm.appendChild(divRole);
         } else if (valueChoose === 'chauffeur') {
             divRole.innerHTML = `<label class="form-check-label"> Choissisez vos permis</label>
                             <div><input class="form-check-input" type="checkbox" value="B" id="permisB"><label class="form-check-label ms-3" for="permisB">Permis B</label></div>

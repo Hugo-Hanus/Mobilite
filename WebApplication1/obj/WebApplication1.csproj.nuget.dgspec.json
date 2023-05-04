@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\HELMO\\2022\\AI\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {}
+    "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\HELMO\\2022\\AI\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {
+    "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\HELMO\\2022\\AI\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\HELMO\\2022\\AI\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+        "projectPath": "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj",
         "packagesPath": "C:\\Users\\hanus\\.nuget\\packages\\",
-        "outputPath": "C:\\HELMO\\2022\\AI\\WebApplication1\\WebApplication1\\obj\\",
+        "outputPath": "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\hanus\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -8,93 +8,93 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WebApplication1
 build_property.RootNamespace = WebApplication1
-build_property.ProjectDir = C:\HELMO\2022\AI\WebApplication1\WebApplication1\
+build_property.ProjectDir = C:\HELMO\2022\AI\HELMo-bilite\WebApplication1\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\HELMO\2022\AI\WebApplication1\WebApplication1
+build_property.MSBuildProjectDirectory = C:\HELMO\2022\AI\HELMo-bilite\WebApplication1
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/AjouterCamion.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/AjouterCamion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBam91dGVyQ2FtaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/ClientListe.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ClientListe.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDbGllbnRMaXN0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/Connexion.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Connexion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb25uZXhpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/CreerLivraison.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/CreerLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDcmVlckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/Dispatch.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Dispatch.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEaXNwYXRjaC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/GererLivraison.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/GererLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXJlckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/GestionEffectif.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/GestionEffectif.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXN0aW9uRWZmZWN0aWYuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/Index.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/InscriptionClient.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/InscriptionClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbnNjcmlwdGlvbkNsaWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/InscriptionMembre.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/InscriptionMembre.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbnNjcmlwdGlvbk1lbWJyZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/Livraison.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Livraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMaXZyYWlzb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/LivraisonDispatch.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/LivraisonDispatch.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMaXZyYWlzb25EaXNwYXRjaC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/Privacy.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/RaterLivraison.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/RaterLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSYXRlckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/Statistique.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Statistique.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdGF0aXN0aXF1ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Home/ValiderLivraison.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ValiderLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWYWxpZGVyTGl2cmFpc29uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Shared/Error.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/_ViewImports.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/_ViewStart.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/WebApplication1/WebApplication1/Views/Shared/_Layout.cshtml]
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-bddmc6yalx
