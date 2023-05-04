@@ -5,49 +5,51 @@
 
 <div class="container">
     <h1 class="display-4">Inscription - Membre:</h1>
-    <form>
+    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="InscriptionMembres">
         <div class=" d-flex flex-column align-items-start ">
                 <label for="role_select">Votre Rôle</label>
-                <select name="role" id="role_select">
+                    <select name="role" id="role_select">
                         <option value="">Choisissez une option</option>
                         <option value="dispatcher">Dispatcher</option>
-                        <option value="chauffeur">Chauffeur</option>
+                    <option value="chauffeur">Chauffeur</option>
                     </select>
             </div>
         <div class="form-group mb-3">
             <label for="matricule">Matricule</label>
-            <input type="text" class="form-control" id="matricule" placeholder="Matricule">
+            <input type="text" class="form-control" id="matricule" placeholder="Matricule" name="matriculeValue">
         </div>
         <div class="form-group mb-3">
-            <label>Nom et Prénom</label>
+            <label>Nom et Prénom</label>            
             <div class="d-flex mb-3">
-                <input type="text" class="form-control" id="name" placeholder="Nom">
-                <input type="text" class="form-control" id="surname" placeholder="Prénom">
+                <input type="text" class="form-control" id="name" placeholder="Nom" name="nameValue">
+                <input type="text" class="form-control" id="surname" placeholder="Prénom" name="surnameValue">
             </div>
         </div>
         <div class="form-group mb-3">
             <label for="mail">Adresse Mail</label>
-            <input type="email" class="form-control" id="mail" placeholder="Adresse mail">
+            <input type="email" class="form-control" id="mail" placeholder="Adresse mail" name="mailValue">
         </div>
         <div class="form-group mb-3">
             <label for="passwordUser">Mot de passe</label>
-            <input type="password" class="form-control" id="passwordUser" placeholder="Mot de passe">
+            <input type="password" class="form-control" id="passwordUser" placeholder="Mot de passe" name="passwordValue">
         </div>
         <div class="form-group mb-3">
             <label for="passwordUserConfirm">Confirmation du mot de passe</label>
-            <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe">
+            <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe" name="passwordConfirmValue">
         </div>
         <div class="form-group mb-3" id="roleComplete">
 
         </div>
         <div class="form-group mb-3">
             <label for="birthdate">Date de Naissance</label>
-            <input type="date" class="form-control" id="birthdate" placeholder="Date de naissance">
+            <input  type="date" class="form-control" id="birthdate" placeholder="Date de naissance" name="birthdateValue">
         </div>
-        <div class="d-grid mb-3">
-            <label for="photo">Photo</label>
-            <input type="file" class="form-control-file" id="logo">
-        </div>
+    <!--
+    <div class="d-grid mb-3">
+        <label for="photo">Photo</label>
+        <input type="file" class="form-control-file" id="logo">
+    </div>
+    -->
         <button type="submit" class="btn btn-primary">Confirmer</button>
     </form>
 </div>

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,88 @@ public class HomeController : Controller
     {
         return PartialView();
     }
+    
+    [HttpPost]
+    public async Task<IActionResult> InscriptionMembres([FromForm] IFormCollection form)
+    {
+        string type = form["role"].ToString();
+        string matricule = form["matriculeValue"].ToString();
+        string nom = form["nameValue"].ToString();
+        string prenom = form["surnameValue"].ToString();
+        string mail = form["mailValue"].ToString();
+        string password = form["passwordValue"].ToString();
+        string passwordConfirm = form["passwordConfirmValue"].ToString();
+        string naissance = form["birthdateValue"].ToString();
+        
+
+        if (type.Equals("dispatcher"))
+        {
+            string diplome = form["divName"].ToString();
+            Dispatcher dispatcher = new Dispatcher();
+            if (diplome.Equals("CESS"))
+            {
+                dispatcher.NiveauEtudeMax = Dispatcher.NiveauEtude.CESS;
+
+            }else if (diplome.Equals("Bachelier"))
+            {
+                dispatcher.NiveauEtudeMax = Dispatcher.NiveauEtude.Bachelier;
+
+            }
+            else
+            {
+                dispatcher.NiveauEtudeMax = Dispatcher.NiveauEtude.Licencier;
+            }
+
+            dispatcher.Email = mail;
+            dispatcher.DateNaissance = naissance;
+            dispatcher.Matricule = matricule;
+            dispatcher.Nom = nom;
+            dispatcher.Prenom = prenom;
+
+            if (password.Equals(passwordConfirm))
+            {
+                dispatcher.MotDePasse= password;
+            }
+
+            _context.Dispatchers.Add(dispatcher);
+            await _context.SaveChangesAsync();
+
+
+        }else if (type.Equals("chauffeur"))
+        {
+            var list = form["divPermis"];
+            Chauffeur chauffeur = new Chauffeur();
+
+            foreach (string s in list)
+            {
+                if (s.Equals("B"))
+                {
+                    chauffeur.PermisB = true;
+                }else if (s.Equals("C"))
+                {
+                    chauffeur.PermisC = true;
+                }
+                else
+                {
+                    chauffeur.PermisCE = true;
+                }
+            }
+            
+            chauffeur.Email = mail;
+            chauffeur.DateNaissance = naissance;
+            chauffeur.Matricule = matricule;
+            chauffeur.Nom = nom;
+            chauffeur.Prenom = prenom;
+
+            if (password.Equals(passwordConfirm))
+            {
+                chauffeur.MotDePasse= password;
+            }
+            _context.Chauffeurs.Add(chauffeur);
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction("Index");
+    } 
     public IActionResult Connexion()
     {
         return PartialView();
