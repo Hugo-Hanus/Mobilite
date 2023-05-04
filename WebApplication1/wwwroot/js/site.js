@@ -15,16 +15,16 @@ if(selectRole!=null) {
             added.remove();
         }
         if (valueChoose === 'dispatcher') {
-            divRole.innerHTML = `<label class="form-check-label"> Choissisez vos diplomes</label>
-                            <div><input class="form-check-input" type="checkbox" value="CESS" id="diplomeCess"><label class="form-check-label ms-3" for="diplomeCess">CESS</label></div>
-                            <div><input class="form-check-input" type="checkbox" value="Bachelier" id="diplomeBachelier"><label class="form-check-label ms-3" for="diplomeBachelier">Bachelier</label></div>
-                             <div><input class="form-check-input" type="checkbox" value="Licencier" id="diplomeLicencier"><label class="form-check-label ms-3" for="diplomeLicencier">Licencier</label></div>`;
+            divRole.innerHTML = `<label class="form-check-label"> Choissisez votre diplome de plus haut niveau</label>
+                            <div><input class="form-check-input" name="divName" type="radio" value="CESS" id="diplome"><label class="form-check-label ms-3" for="diplome">CESS</label></div>
+                            <div><input class="form-check-input" name="divName" type="radio" value="Bachelier" id="diplome"><label class="form-check-label ms-3" for="diplome">Bachelier</label></div>
+                             <div><input class="form-check-input" name="divName" type="radio" value="Licencier" id="diplome"><label class="form-check-label ms-3" for="diplome">Licencier</label></div>`;
             divForm.appendChild(divRole);
         } else if (valueChoose === 'chauffeur') {
             divRole.innerHTML = `<label class="form-check-label"> Choissisez vos permis</label>
-                            <div><input class="form-check-input" type="checkbox" value="B" id="permisB"><label class="form-check-label ms-3" for="permisB">Permis B</label></div>
-                            <div><input class="form-check-input" type="checkbox" value="C" id="permisC"><label class="form-check-label ms-3" for="permisC">Permis C</label></div>
-                             <div><input class="form-check-input" type="checkbox" value="CE" id="permisCE"><label class="form-check-label ms-3" for="permisCE">Permis CE</label></div>`;
+                            <div><input class="form-check-input" name="divPermis" type="checkbox" value="B" id="permisB"><label class="form-check-label ms-3" for="permisB">Permis B</label></div>
+                            <div><input class="form-check-input" name="divPermis" type="checkbox" value="C" id="permisC"><label class="form-check-label ms-3" for="permisC">Permis C</label></div>
+                             <div><input class="form-check-input" name="divPermis" type="checkbox" value="CE" id="permisCE"><label class="form-check-label ms-3" for="permisCE">Permis CE</label></div>`;
             divForm.appendChild(divRole);
         } else {
         }
