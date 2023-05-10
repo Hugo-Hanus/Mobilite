@@ -109,3 +109,4 @@ C:\Users\Timotei\Documents\WebAvancé\V2\HELMo-bilite\WebApplication1\obj\Debug\
 C:\Users\Timotei\Documents\WebAvancé\V2\HELMo-bilite\WebApplication1\obj\Debug\net6.0\WebApplication1.pdb
 C:\Users\Timotei\Documents\WebAvancé\V2\HELMo-bilite\WebApplication1\obj\Debug\net6.0\WebApplication1.genruntimeconfig.cache
 C:\Users\Timotei\Documents\WebAvancé\V2\HELMo-bilite\WebApplication1\obj\Debug\net6.0\ref\WebApplication1.dll
+C:\Users\Timotei\Documents\WebAvancé\V2\HELMo-bilite\WebApplication1\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

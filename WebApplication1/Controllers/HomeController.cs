@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers;
 
@@ -32,11 +33,18 @@ public class HomeController : Controller
         return PartialView();
     }
     
-    [HttpPost]
-    public async Task<IActionResult> InscriptionClient(Client client)
+    [HttpPost][ValidateAntiForgeryToken]
+    public async Task<IActionResult> InscriptionClient([FromServices]UserManager<IdentityUser> userManager, [FromServices]SignInManager<IdentityUser> signInManager, Client client)
     {
-        _context.Clients.Add(client);
-        await _context.SaveChangesAsync();
+        if (ModelState.IsValid)
+        {
+            
+            var userIdentity = new IdentityUser(client.NomEntreprise);
+            userIdentity.Email = client.Email;
+            await userManager.CreateAsync(userIdentity, client.MotDePasse);
+            await signInManager.SignInAsync(userIdentity, false);
+            
+        }
 
         return RedirectToAction("Index");
     } 
@@ -45,9 +53,10 @@ public class HomeController : Controller
         return PartialView();
     }
     
-    [HttpPost]
-    public async Task<IActionResult> InscriptionMembres([FromForm] IFormCollection form)
+    [HttpPost][ValidateAntiForgeryToken]
+    public async Task<IActionResult> InscriptionMembre([FromServices]UserManager<IdentityUser> userManager, [FromServices]SignInManager<IdentityUser> signInManager, [FromForm] IFormCollection form)
     {
+        
         string type = form["role"].ToString();
         string matricule = form["matriculeValue"].ToString();
         string nom = form["nameValue"].ToString();
@@ -56,6 +65,7 @@ public class HomeController : Controller
         string password = form["passwordValue"].ToString();
         string passwordConfirm = form["passwordConfirmValue"].ToString();
         string naissance = form["birthdateValue"].ToString();
+        
         
 
         if (type.Equals("dispatcher"))
@@ -81,16 +91,14 @@ public class HomeController : Controller
             dispatcher.Matricule = matricule;
             dispatcher.Nom = nom;
             dispatcher.Prenom = prenom;
+            dispatcher.UserName = matricule;
 
             if (password.Equals(passwordConfirm))
             {
-                dispatcher.MotDePasse= password;
+                await userManager.CreateAsync(dispatcher, password);
+                await signInManager.SignInAsync(dispatcher, false);
             }
-
-            _context.Dispatchers.Add(dispatcher);
-            await _context.SaveChangesAsync();
-
-
+            
         }else if (type.Equals("chauffeur"))
         {
             var list = form["divPermis"];
@@ -111,23 +119,45 @@ public class HomeController : Controller
                 }
             }
             
+            
             chauffeur.Email = mail;
             chauffeur.DateNaissance = naissance;
             chauffeur.Matricule = matricule;
             chauffeur.Nom = nom;
             chauffeur.Prenom = prenom;
+            chauffeur.UserName = matricule;
 
+            if (chauffeur.PermisC == false && chauffeur.PermisCE == true)
+            {
+                chauffeur.PermisC=true;
+            }
+            
             if (password.Equals(passwordConfirm))
             {
-                chauffeur.MotDePasse= password;
+                await userManager.CreateAsync(chauffeur, password);
+                await signInManager.SignInAsync(chauffeur, false);
+                
             }
-            _context.Chauffeurs.Add(chauffeur);
-            await _context.SaveChangesAsync();
         }
         return RedirectToAction("Index");
     } 
     public IActionResult Connexion()
     {
+           
+        return PartialView();
+    }
+    [HttpPost][ValidateAntiForgeryToken]
+    public async Task<IActionResult> Connexion([FromServices]UserManager<IdentityUser>userManager, [FromServices]SignInManager<IdentityUser> signInManager,[FromForm] IFormCollection form)
+    {
+        var userIdentity = await userManager.FindByEmailAsync(form["email"].ToString());
+        if (userIdentity != null)
+        {
+            var signInResult = await signInManager.PasswordSignInAsync(userIdentity, form["password"].ToString(), false, false);
+            if (signInResult.Succeeded)
+            {
+                return RedirectToAction("AjouterCamion");
+            }
+        }
         return PartialView();
     }
     public IActionResult Livraison()
@@ -168,31 +198,34 @@ public class HomeController : Controller
     }
     
     
-    [HttpPost]
+    [HttpPost][ValidateAntiForgeryToken]
     public async Task<IActionResult> AjouterCamion(Camion camion, IFormFile Img)
     {
-        Camion t = camion;
-        if (Img != null && Img.Length > 0)
+        if (ModelState.IsValid)
         {
-            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
-            if (!Directory.Exists(uploadsPath))
+            Camion t = camion;
+            if (Img != null && Img.Length > 0)
             {
-                Directory.CreateDirectory(uploadsPath);
+                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+                if (!Directory.Exists(uploadsPath))
+                {
+                    Directory.CreateDirectory(uploadsPath);
+                }
+
+                var imgFileName = $"{Guid.NewGuid()}_{Img.FileName}";
+                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+
+                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                {
+                    await Img.CopyToAsync(fileStream);
+                }
+
+                camion.Img = $"~/img/{imgFileName}";
             }
 
-            var imgFileName = $"{Guid.NewGuid()}_{Img.FileName}";
-            var imgFilePath = Path.Combine(uploadsPath, imgFileName);
-
-            using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
-            {
-                await Img.CopyToAsync(fileStream);
-            }
-
-            camion.Img = $"~/img/{imgFileName}";
+            _context.Camions.Add(camion);
+            await _context.SaveChangesAsync();
         }
-
-        _context.Camions.Add(camion);
-        await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }

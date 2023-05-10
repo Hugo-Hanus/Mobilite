@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 
@@ -9,6 +11,8 @@ builder.Services.AddDbContext<InstallationDbContext>(options=>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")));
 });
+builder.Services.AddMvc(options=>options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<InstallationDbContext>();
 
 var app = builder.Build();
 
@@ -25,7 +29,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

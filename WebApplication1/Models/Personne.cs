@@ -1,7 +1,9 @@
-﻿namespace WebApplication1.Models;
+﻿using Microsoft.AspNetCore.Identity;
 
-public abstract class Personne
+namespace WebApplication1.Models;
+
+public abstract class Personne : IdentityUser
 {
-    public string Email { get; set; }
+    //public string Email { get; set; }
     public string MotDePasse { get; set; }
 }
