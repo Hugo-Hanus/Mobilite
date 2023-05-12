@@ -1,4 +1,7 @@
 ﻿@model WebApplication1.Models.Camion
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@attribute [Authorize(Roles = "Admin")]
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Ajouter Un Camion";

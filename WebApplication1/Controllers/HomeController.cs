@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers;
@@ -38,11 +39,13 @@ public class HomeController : Controller
     {
         if (ModelState.IsValid)
         {
-            
+
             var userIdentity = new IdentityUser(client.NomEntreprise);
             userIdentity.Email = client.Email;
             await userManager.CreateAsync(userIdentity, client.MotDePasse);
+            await userManager.AddToRoleAsync(client, "Client"); 
             await signInManager.SignInAsync(userIdentity, false);
+            
             
         }
 
@@ -96,6 +99,7 @@ public class HomeController : Controller
             if (password.Equals(passwordConfirm))
             {
                 await userManager.CreateAsync(dispatcher, password);
+                await userManager.AddToRoleAsync(dispatcher, "Dispatcher");
                 await signInManager.SignInAsync(dispatcher, false);
             }
             
@@ -135,6 +139,7 @@ public class HomeController : Controller
             if (password.Equals(passwordConfirm))
             {
                 await userManager.CreateAsync(chauffeur, password);
+                await userManager.AddToRoleAsync(chauffeur, "Chauffeur");
                 await signInManager.SignInAsync(chauffeur, false);
                 
             }
@@ -155,50 +160,67 @@ public class HomeController : Controller
             var signInResult = await signInManager.PasswordSignInAsync(userIdentity, form["password"].ToString(), false, false);
             if (signInResult.Succeeded)
             {
-                return RedirectToAction("AjouterCamion");
+                return RedirectToAction("Index");
             }
         }
         return PartialView();
     }
+    
+    [Authorize(Roles = "Client")]
     public IActionResult Livraison()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Dispatcher")]
+
     public IActionResult Dispatch()
     {
         return PartialView();
-    }public IActionResult GererLivraison()
+    }
+    public IActionResult GererLivraison()
     {
         return PartialView();
     }
-    
+    [Authorize(Roles = "Client")]
+
     public IActionResult CreerLivraison()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Chauffeur")]
     public IActionResult LivraisonDispatch()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Chauffeur")]
     public IActionResult ValiderLivraison()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Chauffeur")]
     public IActionResult RaterLivraison()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Admin")]
     public IActionResult GestionEffectif()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Admin")]
     public IActionResult AjouterCamion()
     {
         return PartialView();
     }
     
     
-    [HttpPost][ValidateAntiForgeryToken]
+    [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Admin")]
     public async Task<IActionResult> AjouterCamion(Camion camion, IFormFile Img)
     {
         if (ModelState.IsValid)
@@ -229,15 +251,23 @@ public class HomeController : Controller
 
         return RedirectToAction("Index");
     }
+    
+    [Authorize(Roles = "Admin")]
     public IActionResult Clientliste()
     {
         return PartialView();
     }
+    
+    [Authorize(Roles = "Admin")]
     public IActionResult Statistique()
     {
         return PartialView();
     }
     
+    public IActionResult ErrorPage()
+    {
+        return PartialView();
+    }
 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
