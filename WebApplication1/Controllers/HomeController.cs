@@ -279,4 +279,17 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    
+    public async Task<IActionResult> Deconnexion([FromServices]SignInManager<IdentityUser> signInManager)
+    {
+        await signInManager.SignOutAsync();
+
+        foreach (var cookie in Request.Cookies.Keys)
+        {
+            Response.Cookies.Delete(cookie);
+        }
+
+        return RedirectToAction("Index");
+
+    }
 }
