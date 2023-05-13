@@ -15,7 +15,14 @@ builder.Services.AddDbContext<InstallationDbContext>(options=>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")));
 });
 builder.Services.AddMvc(options=>options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<InstallationDbContext>().AddRoles<IdentityRole>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{   options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 1;
+    options.Password.RequiredUniqueChars = 1;
+}).AddEntityFrameworkStores<InstallationDbContext>().AddRoles<IdentityRole>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     // Cookie settings

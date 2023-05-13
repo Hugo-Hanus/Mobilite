@@ -42,9 +42,13 @@ public class HomeController : Controller
 
             var userIdentity = new IdentityUser(client.NomEntreprise);
             userIdentity.Email = client.Email;
-            await userManager.CreateAsync(userIdentity, client.MotDePasse);
-            await userManager.AddToRoleAsync(client, "Client"); 
-            await signInManager.SignInAsync(userIdentity, false);
+            var result = await userManager.CreateAsync(userIdentity, client.MotDePasse);
+            
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(userIdentity, "Client"); 
+                await signInManager.SignInAsync(userIdentity, false);
+            }
             
             
         }
