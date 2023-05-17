@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "_Layout";     
     ViewData["Title"] = "Home Page";
+    @model List<Client>
 }
 
 <div class="container text-center">
@@ -19,14 +20,9 @@
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
         </div>
     </article>
-<article class="text-center">
-    <h3 class="card-title ">Nos Partenaires</h3>
-    <img class="m-2" src="img/logo/cod-lab.png" width="100" height="100" alt="logoCodLab"/>
-    <img class="m-2" src="img/logo/tower.png" width="100" height="100" alt="logoCodLab"/>
-    <img class="m-2" src="img/logo/earth-2.png" width="100" height="100" alt="logoCodLab"/>
-    <img class="m-2" src="img/logo/fossa.png" width="100" height="100" alt="logoCodLab"/>
-    <img class="m-2" src="img/logo/hex-lab.png" width="100" height="100" alt="logoCodLab"/>
-    <img class="m-2" src="img/logo/fox-hub-2.png" width="100" height="100" alt="logoCodLab"/>
-    <img class="m-2" src="img/logo/tvit.png" width="100" height="100" alt="logoCodLab"/>
-</article>
+    <article class="text-center">
+        <h3 class="card-title ">Nos Partenaires</h3>
+        @await Html.PartialAsync("_AllLogoClient", Model)
+        <img class="m-2" src="img/logo/cod-lab.png" width="100" height="100" alt="logoCodLab"/>
+    </article>
 </div>

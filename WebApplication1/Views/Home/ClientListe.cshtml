@@ -3,32 +3,34 @@
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Gestion des Clients";
+    @model List<Client>
 }
 <div class="container">
-<h1 class="display-4 me-4">Gestion des Clients: </h1>
+    <h1 class="display-4 me-4">Gestion des Clients: </h1>
     <div class="mb-5">
-   <ul class="list-group">
-           <li class="list-group-item d-flex justify-content-between align-items-center">
-               Jean Tulipe
-               <div class="form-check form-switch ">
-                 <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer">
-                 <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
-               </div>
-           </li>
-       <li class="list-group-item d-flex justify-content-between align-items-center">
-           Jean Coquelicot
-           <div class="form-check form-switch">
-               <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer">
-               <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
-           </div>
-       </li>
-       <li class="list-group-item d-flex justify-content-between align-items-center">
-           Jean Tournesol
-           <div class="form-check form-switch">
-               <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer">
-               <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
-           </div>
-       </li>
-   </ul>
-  </div>
+        <ul class="list-group">
+            @RenderSection("ClientList");
+        </ul>
+    </div>
 </div>
+
+@section ClientList{
+    @foreach (var client in Model)
+    {
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            @client.NomEntreprise
+            <div class="form-check form-switch ">
+                @if (client.ID == 1)/*client.bad == true*/
+                {
+                    <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer" checked>
+                    <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
+                }
+                else
+                {
+                    <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer">
+                    <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
+                }
+            </div>
+        </li>
+    }
+}

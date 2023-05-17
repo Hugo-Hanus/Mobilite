@@ -4,10 +4,11 @@
 @{
     Layout = "_Layout";  
 ViewData["Title"] = "Valider la Livraison";
+    @model Livraison
 }
 <div class="container">
-    <h1 class="display-4 me-4">Valider la Livraison XX:</h1>
-    <h2>Livraison XX</h2>
+    <h1 class="display-4 me-4">Valider la Livraison @Model.ID:</h1>
+    <h2>Livraison @Model.ID</h2>
     <form>
         <div class="mb-3">
             <label for="dateChargementEf" class="form-label">Date de Chargement effectuée</label>

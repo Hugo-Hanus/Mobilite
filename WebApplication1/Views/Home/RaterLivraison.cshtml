@@ -4,9 +4,10 @@
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Rater la Livraison";
+    @model Livraison
 }
 <div class="container">
-    <h1 class="display-4 me-4">Rater la Livraison XX:</h1>
+    <h1 class="display-4 me-4">Rater la Livraison @Model.ID:</h1>
     <form>
         <div class="form-check mb-4">
           <label class="form-check-label"> Choissisez votre raison</label>

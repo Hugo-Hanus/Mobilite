@@ -1,9 +1,10 @@
-﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @attribute [Authorize(Roles = "Dispatcher")]
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Gérer la livraison ";
+    @model List<Chauffeur>
 }
 <div class="container">
     <h1 class="display-4 me-4">Gérer la Livraison XX:</h1>
@@ -12,9 +13,7 @@
     <div class="mb-2" id="formChauffeur">
         <select class="form-select" id="chauffeurSelect" aria-label="Default select example">
             <option selected>Choissisez un Chauffeur</option>
-            <option value="1">Jean</option>
-            <option value="2">Albert</option>
-            <option value="3">Thomas</option>
+            @RenderSection("ListChauffeurDispo")
         </select>
     </div>
         <div id="formCamion">
@@ -25,3 +24,10 @@
         </div>
     </form>
 </div>
+
+@section ListChauffeurDispo{
+    @foreach (Chauffeur chauffeur in Model)
+    {
+        <option value="@chauffeur.ID">@chauffeur.Prenom @chauffeur.Nom</option>
+    }
+}

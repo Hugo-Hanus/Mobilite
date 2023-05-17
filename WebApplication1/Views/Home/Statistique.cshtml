@@ -3,14 +3,15 @@
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Statistiques";
+  @model List<Livraison>
 }
 <div class="container">
-<h1 class="display-4 me-4">Statistiques :</h1>
-    <div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="Hubert,Gare,23/02,..." aria-label="Hubert,Gare,23/02,..." aria-describedby="recherche">
-  <button class="btn btn-secondary" type="button" id="recherche">Recherche</button>
-</div>
-<div class="mb-5">
+  <h1 class="display-4 me-4">Statistiques :</h1>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Hubert,Gare,23/02,..." aria-label="Hubert,Gare,23/02,..." aria-describedby="recherche">
+    <button class="btn btn-secondary" type="button" id="recherche">Recherche</button>
+  </div>
+  <div class="mb-5">
     <table class="table table-striped">
       <thead>
       <tr>
@@ -20,22 +21,21 @@ ViewData["Title"] = "Statistiques";
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <th scope="row">Livraison 64</th>
-        <td>20/12/2014</td>
-        <td>Jean Rose</td>
-      </tr>
-      <tr>
-        <th scope="row">Livraison 64</th>
-        <td>20/12/2014</td>
-        <td>Jean Rose</td>
-      </tr>
-      <tr>
-        <th scope="row">Livraison 64</th>
-        <td>20/12/2014</td>
-        <td>Jean Rose</td>
-      </tr>
+      @RenderSection("ListLivraison")
       </tbody>
     </table>
   </div>
 </div>
+
+
+@section ListLivraison{
+  
+  @foreach (var livraison in Model)
+  {
+    <tr>
+      <th scope="row">@livraison.ID</th>
+      <td>@livraison.HeureDechargementPrevu</td>
+      <td>@livraison.Contenu</td>@{/*nom du livreur*/}
+    </tr>
+  }
+}

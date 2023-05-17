@@ -4,81 +4,37 @@
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Livraison - Dispatch";
+    @model List<Livraison>
 }
 <div class="container">
     <div>
         <h1 class="display-4 me-4">Livraison:</h1>
     </div>
-    <div class="mb-4">
-        <h2>14/05/2023</h2>
-        <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <p class="font-weight-bold">Livraison 71</p>
-                    <p>Rue Jean 6 4000 Liège à 6H00</p>
-                </div>
-                <div>
-                    <a class="btn btn-success" asp-controller="Home" asp-action="ValiderLivraison">Valider</a>
-                    <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison">Rater</a>
-                </div>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <p class="font-weight-bold">Livraison 73</p>
-                    <p>Rue Jean 6 4000 Liège à 6H00</p>
-                </div>
-                <div>
-                    <a class="btn btn-success" asp-controller="Home" asp-action="ValiderLivraison">Valider</a>
-                    <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison">Rater</a>
-                </div>
-            </li>
-             
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <p font-weight-bold>Livraison 73</p>
-                    <p>Rue Jean 6 4000 Liège à 6H00</p>
-                </div>
-                <div>
-                    <a class="btn btn-success" asp-controller="Home" asp-action="GererLivraison">Valider</a>
-                    <a class="btn btn-danger" asp-controller="Home" asp-action="GererLivraison">Rater</a>
-                </div>
-            </li>
-        </ul>
-    </div>
-     <div class="mb-4">
-            <h2>15/02/2024</h2>
-             <ul class="list-group">
-                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <div>
-                         <p class="font-weight-bold">Livraison 71</p>
-                         <p>Rue Jean 6 4000 Liège à 6H00</p>
-                     </div>
-                     <div>
-                         <a class="btn btn-success" asp-controller="Home" asp-action="GererLivraison">Valider</a>
-                         <a class="btn btn-danger" asp-controller="Home" asp-action="GererLivraison">Rater</a>
-                     </div>
-                 </li>
-                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <div>
-                         <p class="font-weight-bold">Livraison 73</p>
-                         <p>Rue Jean 6 4000 Liège à 6H00</p>
-                     </div>
-                     <div>
-                         <a class="btn btn-success" asp-controller="Home" asp-action="GererLivraison">Valider</a>
-                         <a class="btn btn-danger" asp-controller="Home" asp-action="GererLivraison">Rater</a>
-                     </div>
-                 </li>
-                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                     <div>
-                         <p font-weight-bold>Livraison 73</p>
-                         <p>Rue Jean 6 4000 Liège à 6H00</p>
-                         </div>
-                     <div>
-                         <a class="btn btn-success" asp-controller="Home" asp-action="GererLivraison">Valider</a>
-                         <a class="btn btn-danger" asp-controller="Home" asp-action="GererLivraison">Rater</a>
-                         </div>
-                     </li>
-             </ul>
-        </div>
+    @RenderSection("ListLivraisonPerDate")
 
 </div>
+
+@section ListLivraisonPerDate{
+    @foreach (var date in "")
+    {
+        <div class="mb-4">
+            <h2>@date</h2>
+            <ul class="list-group">
+                @foreach (var livraisonADate in Model)/*toute les livraison à cette date*/
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="font-weight-bold">Livraison @livraisonADate.ID</p>
+                            <p>@livraisonADate.LieuChargement à @livraisonADate.HeureDechargementPrevu</p>
+                        </div>
+                        <div>
+                            <a class="btn btn-success" asp-controller="Home" asp-action="ValiderLivraison">Valider</a>
+                            <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison">Rater</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    
+}
