@@ -4,8 +4,7 @@ namespace WebApplication1.Models;
 
 public class Client : Personne
 {
-    [Key][Required]
-    public int ID { get; set; } 
+    
     [Required]
     public string NomEntreprise { get; set; }
     [Required]
@@ -18,4 +17,6 @@ public class Client : Personne
     public string Localite { get; set; }
     [Required]
     public string Pays { get; set; }
+    
+    public bool isMauvaisPayeur { get; set; }
 }
