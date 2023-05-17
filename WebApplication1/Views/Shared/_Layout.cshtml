@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -22,43 +26,92 @@
                     <li class="nav-item ">
                         <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Livraison">Livraison Client</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="LivraisonDispatch">Livraison Dispatch</a>
-                        </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Dispatch">Dispatch</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GestionEffectif">Gestion ADMIN</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ClientListe">Liste des Clients</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Statistique">Statistiques</a>
-                    </li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (await UserManager.IsInRoleAsync(user, "Dispatcher"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Dispatch">Dispatch</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
+                            </li>
+                        }
+                    }
+                    
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (await UserManager.IsInRoleAsync(user, "Chauffeur"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="LivraisonDispatch">Livraison Dispatch</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
+                            </li>
+                        }
+                    }
+                    
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (await UserManager.IsInRoleAsync(user, "Client"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Livraison">Livraison Client</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
+                            </li>
+                        }
+                    }
+                    
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        if (await UserManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GestionEffectif">Gestion ADMIN</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ClientListe">Liste des Clients</a>
+                            </li>
+                                
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Statistique">Statistiques</a>
+                            </li>   
+                        }
+                    }
+
+                    
                 </ul>
             </div>
-            <div class="navbar-collapse collapse d-sm-inline-flex">
-                            <ul class="navbar-nav flex-grow-1 justify-content-end">
-                                <li class="nav-item px-2 dropdown">
-                                    <button class="btn btn-primary dropdownbtn" asp-area="" asp-controller="Home" asp-action="Index">Inscription</button>
-                                    <div class="dropdown-content">
-                                        <a class="text-black" asp-controller="Home" asp-action="InscriptionClient">Client</a>
-                                        <a class="text-black" asp-controller="Home" asp-action="InscriptionMembre">Membre</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item px-2">
-                                        <a class="btn btn-secondary" asp-controller="Home" asp-action="Connexion">Connexion</a>
-                                </li>
-                            </ul>
-                        </div>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="nav-item px-2">
+                    <a class="btn btn-secondary" asp-controller="Home" asp-action="Deconnexion">Deconnexion</a>
+                </li>
+            }
+            else
+            {
+                <div class="navbar-collapse collapse d-sm-inline-flex">
+                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                        <li class="nav-item px-2 dropdown">
+                            <button class="btn btn-primary dropdownbtn" asp-area="" asp-controller="Home" asp-action="Index">Inscription</button>
+                            <div class="dropdown-content">
+                                <a class="text-black" asp-controller="Home" asp-action="InscriptionClient">Client</a>
+                                <a class="text-black" asp-controller="Home" asp-action="InscriptionMembre">Membre</a>
+                            </div>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a class="btn btn-secondary" asp-controller="Home" asp-action="Connexion">Connexion</a>
+                        </li>
+                    </ul>
+                </div>
+            }
         </div>
     </nav>
 </header>

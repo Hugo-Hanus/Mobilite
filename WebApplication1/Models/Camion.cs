@@ -5,10 +5,10 @@ namespace WebApplication1.Models;
 
 public class Camion
 {
-    public Camion(string marque, string modèle, string immatriculation, string type, int tonnage)
+    public Camion(string marque, string modele, string immatriculation, string type, int tonnage)
     {
         this.Marque = marque;
-        this.Modèle = modèle;
+        this.Modele = modele;
         this.Immatriculation = immatriculation;
         this.Type = type;
         this.Tonnage = tonnage;
@@ -25,7 +25,7 @@ public class Camion
     [Required][MaxLength(50)]
     public string Marque { get; set; }
     [Required][MaxLength(50)]
-    public string Modèle { get; set; }
+    public string Modele { get; set; }
     [Required][MaxLength(25)]
     public string Immatriculation { get; set; }
     [Required][MaxLength(2)]

@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Models;
 
-public class InstallationDbContext : DbContext
+public class InstallationDbContext : IdentityDbContext
 {
   public InstallationDbContext(DbContextOptions<InstallationDbContext> options) : base(options)
   {

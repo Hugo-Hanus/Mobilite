@@ -1,5 +1,8 @@
-﻿@{
-    Layout = "_Layout";
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@attribute [Authorize(Roles = "Dispatcher")]
+@{
+    Layout = "_Layout";  
     ViewData["Title"] = "Gérer la livraison ";
     @model List<Chauffeur>
 }
