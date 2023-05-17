@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Controllers;
 
@@ -19,18 +20,24 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return PartialView();
+        List<Client> listClients=new List<Client>();
+        using (_context)
+        {
+            listClients= _context.Clients.ToList();
+        }
+        return PartialView("Index",listClients);
     }
 
     public IActionResult Privacy()
     {
         return PartialView();
     }
+
     public IActionResult InscriptionClient()
     {
         return PartialView();
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> InscriptionClient(Client client)
     {
@@ -65,7 +72,13 @@ public class HomeController : Controller
     }
     public IActionResult LivraisonDispatch()
     {
-        return PartialView();
+        List<Livraison> listLivraison= new List<Livraison>();
+
+        using (_context )
+        {
+            listLivraison = _context.Livraison.Where(l=>l.StatutLivraison==Models.Livraison.Statut.Attente).ToList();
+        }
+        return PartialView("Dispatch",listLivraison);
     }
     public IActionResult ValiderLivraison()
     {

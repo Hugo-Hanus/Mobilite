@@ -1,10 +1,10 @@
 ﻿@{
     Layout = "_Layout";  
-    ViewData["Title"] = "Membre Inscription";
+    ViewData["Title"] = "Membre Modification";
 }
 
 <div class="container">
-    <h1 class="display-4">Inscription - Membre:</h1>
+    <h1 class="display-4">Modification - Membre:</h1>
     <form method="post" enctype="multipart/form-data">
         <div class=" d-flex flex-column align-items-start ">
                 <label for="role_select">Votre Rôle</label>
@@ -39,6 +39,10 @@
         </div>
         <div class="form-group mb-3" id="roleComplete">
 
+        </div>
+        <div class="form-group mb-3">
+            <label for="birthdate">Date de Naissance</label>
+            <input type="date" class="form-control" id="birthdate" placeholder="Date de naissance">
         </div>
         <button type="submit" class="btn btn-primary">Confirmer</button>
     </form>

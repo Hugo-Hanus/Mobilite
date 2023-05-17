@@ -12,4 +12,5 @@ public class InstallationDbContext : DbContext
   public DbSet<Client> Clients { get; set; }
   public DbSet<Dispatcher> Dispatchers { get; set; }
   public DbSet<Chauffeur> Chauffeurs { get; set; }
+  public DbSet<Livraison> Livraison { get; set; }
 }
