@@ -20,7 +20,37 @@
 
 <div class="container">
     <h1 class="display-4">Inscription - Client:</h1>
-    <form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="InscriptionClientPost" onsubmit="return checkPassword();">
-    @await Html.PartialAsync("InscriptionClientForm")
-  </form>
+    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="InscriptionClient" onsubmit="return checkPassword();">
+        <div class="form-group mb-3">
+            <label for="entrepriseName">Nom de L'entreprise</label>
+            <input asp-for="NomEntreprise" type="text" class="form-control" id="entrepriseName" placeholder="Nom de l'entreprise" >
+        </div>
+        <div class="form-group mb-3">
+            <label for="email">Adresse Mail</label>
+            <input asp-for="Email" type="email" class="form-control" id="mail" placeholder="Adresse mail">
+        </div>
+        <div class="form-group mb-3">
+            <label for="passwordUser">Mot de passe</label>
+            <input asp-for="MotDePasse" type="password" class="form-control" id="passwordUser" placeholder="Mot de passe">
+        </div>
+        <div class="form-group mb-3">
+            <label for="passwordUserConfirm">Confirmation du mot de passe</label>
+            <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe">
+        </div>
+        <div class="form-group mb-3">
+            <label for="adress">Adresse </label>
+            <div class="d-flex mb-3">
+                <input asp-for="Rue" type="text" class="form-control" id="road" placeholder="Rue">
+                <input asp-for="Numero" type="number" class="form-control" id="numberRoad" placeholder="Numéro">
+                <input asp-for="CodePostal" type="number" class="form-control" id="postalCode" placeholder="Code Postal">
+            </div>
+            <div class="d-flex mb-3">
+                <input asp-for="Localite" type="text" class="form-control" id="locality" placeholder="Localité">
+                <input asp-for="Pays" type="text" class="form-control" id="country" placeholder="Pays">
+            </div>
+        </div>
+    <button type="submit" class="btn btn-success">Ajouter</button>
+
+    </form>
+
 </div>

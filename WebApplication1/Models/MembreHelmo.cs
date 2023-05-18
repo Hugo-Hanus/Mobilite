@@ -7,4 +7,6 @@ public class MembreHelmo : Personne
     public string Matricule { get; set; }
     
     public string DateNaissance { get; set; }
+    
+    public string PhotoProfil { get; set; }
 }

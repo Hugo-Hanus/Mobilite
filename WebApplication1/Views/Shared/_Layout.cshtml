@@ -24,7 +24,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item ">
-                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     @if (SignInManager.IsSignedIn(User))
                     {
@@ -32,10 +32,10 @@
                         if (await UserManager.IsInRoleAsync(user, "Dispatcher"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Dispatch">Dispatch</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="Dispatch">Dispatch</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="ModificationDispatcher">Profil</a>
                             </li>
                         }
                     }
@@ -46,10 +46,10 @@
                         if (await UserManager.IsInRoleAsync(user, "Chauffeur"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="LivraisonDispatch">Livraison Dispatch</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="LivraisonDispatch">Livraison Dispatch</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
+                                <a class="nav-link"  asp-controller="Home" asp-action="ModificationChauffeur">Profil</a>
                             </li>
                         }
                     }
@@ -60,10 +60,10 @@
                         if (await UserManager.IsInRoleAsync(user, "Client"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Livraison">Livraison Client</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="Livraison">Livraison Client</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Profil</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="ModificationClient">Profil</a>
                             </li>
                         }
                     }
@@ -74,10 +74,10 @@
                         if (await UserManager.IsInRoleAsync(user, "Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="GestionEffectif">Gestion ADMIN</a>
+                                <a class="nav-link"  asp-controller="Home" asp-action="GestionEffectif">Gestion ADMIN</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ClientListe">Liste des Clients</a>
+                                <a class="nav-link"  asp-controller="Home" asp-action="ClientListe">Liste des Clients</a>
                             </li>
                                 
                             <li class="nav-item">

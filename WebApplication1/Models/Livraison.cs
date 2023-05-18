@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models;
 
@@ -27,7 +28,7 @@ public class Livraison
     [Required] public string Contenu { get; set; }
     [Required] public DateTime HeureChargement { get; set; }
     [Required] public DateTime HeureDechargementPrevu { get; set; }
-    [Required] public Statut StatutLivraison { get; set; }
+    [Required][DefaultValue("Attente")] public Statut StatutLivraison { get; set; }
 
     public Motif MotifLivraison
     {
