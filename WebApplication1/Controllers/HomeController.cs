@@ -437,6 +437,62 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
+    [Authorize(Roles = "Chauffeur")]
+    public IActionResult ModificationChauffeur()
+    {
+        return PartialView();
+    }
 
+    [Authorize(Roles = "Chauffeur")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ModificationChauffeur([FromServices] UserManager<IdentityUser> userManager, IFormFile profil, [FromForm] IFormCollection form)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userCasted = await _context.Users.OfType<Chauffeur>().SingleOrDefaultAsync(u => u.Id == userId);
+            
+            if (!form["dateNaissance"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.DateNaissance = form["dateNaissance"].FirstOrDefault();
 
+            }
+            if (!form["nom"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Nom = form["nom"].FirstOrDefault();
+
+            }
+            if (!form["prenom"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Prenom = form["prenom"].FirstOrDefault();
+
+            }
+            if (!form["matricule"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Matricule = form["matricule"].FirstOrDefault();
+
+            }
+            if (profil != null && profil.Length > 0)
+            {
+                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+
+                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
+                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+
+                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                {
+                    await profil.CopyToAsync(fileStream);
+                }
+                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+
+            }
+            
+            await userManager.UpdateAsync(userCasted);
+            await _context.SaveChangesAsync();
+            
+        }
+        return RedirectToAction("Index");
+
+    }
 }
