@@ -99,16 +99,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW9kaWZpY2F0aW9uXE1vZGlmaWNhdGlvbkxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Timotei/Documents/WebAvancé/175/HELMo-bilite/WebApplication1/Views/Modification/ModificationMembre.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW9kaWZpY2F0aW9uXE1vZGlmaWNhdGlvbk1lbWJyZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Timotei/Documents/WebAvancé/175/HELMo-bilite/WebApplication1/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Timotei/Documents/WebAvancé/175/HELMo-bilite/WebApplication1/Views/Shared/InscriptionClientForm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEluc2NyaXB0aW9uQ2xpZW50Rm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Timotei/Documents/WebAvancé/175/HELMo-bilite/WebApplication1/Views/Shared/ModificationDispatcher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXE1vZGlmaWNhdGlvbkRpc3BhdGNoZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Timotei/Documents/WebAvancé/175/HELMo-bilite/WebApplication1/Views/Shared/_AllLogoClient.cshtml]
