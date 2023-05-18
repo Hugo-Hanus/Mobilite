@@ -23,10 +23,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         List<Client> listClients=new List<Client>();
-        using (_context)
-        {
-            listClients= _context.Clients.ToList();
-        }
+        listClients= _context.Clients.ToList();
         return PartialView("Index",listClients);
     }
 
@@ -42,8 +39,8 @@ public class HomeController : Controller
     [HttpPost][ValidateAntiForgeryToken]
     public async Task<IActionResult> InscriptionClient([FromServices]UserManager<IdentityUser> userManager, [FromServices]SignInManager<IdentityUser> signInManager, Client client)
     {
-        if (ModelState.IsValid)
-        {
+        
+        
 
             var userIdentity = new IdentityUser(client.NomEntreprise);
             userIdentity.Email = client.Email;
@@ -53,10 +50,14 @@ public class HomeController : Controller
             {
                 await userManager.AddToRoleAsync(userIdentity, "Client"); 
                 await signInManager.SignInAsync(userIdentity, false);
+                
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+                var uploadPath2 = Path.Combine(uploadPath, "logo", client.NomEntreprise);
+                Directory.CreateDirectory(uploadPath2);
             }
             
             
-        }
+        
 
         return RedirectToAction("Index");
     } 
