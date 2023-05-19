@@ -1,12 +1,12 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models;
 
 public class Livraison
 {
-    public Livraison(string lieuChargement, string lieuDechargement, string contenu, DateTime heureChargement,
-        DateTime heureDechargementPrevu, Statut statutLivraison, string commentaire)
+    public Livraison(string lieuChargement, string lieuDechargement, string contenu, string heureChargement,
+        string heureDechargementPrevu, Statut statutLivraison, string commentaire, string dateChargement, string dateDechargement)
     {
         LieuChargement = lieuChargement;
         LieuDechargement = lieuDechargement;
@@ -15,6 +15,8 @@ public class Livraison
         HeureDechargementPrevu = heureDechargementPrevu;
         StatutLivraison = statutLivraison;
         Commentaire = commentaire;
+        DateChargement = dateChargement;
+        DateDechargement = dateDechargement;
     }
 
     public Livraison()
@@ -25,10 +27,13 @@ public class Livraison
     [Key] [Required] public int ID { get; set; }
     [Required] public string LieuChargement { get; set; }
     [Required] public string LieuDechargement { get; set; }
+    [Required] public string DateChargement { get; set; }
+    [Required] public string DateDechargement { get; set; }
+
     [Required] public string Contenu { get; set; }
-    [Required] public DateTime HeureChargement { get; set; }
-    [Required] public DateTime HeureDechargementPrevu { get; set; }
-    [Required][DefaultValue("Attente")] public Statut StatutLivraison { get; set; }
+    [Required] public string HeureChargement { get; set; }
+    [Required] public string HeureDechargementPrevu { get; set; }
+    [Required] public Statut StatutLivraison { get; set; }
 
     public Motif MotifLivraison
     {
@@ -36,7 +41,7 @@ public class Livraison
         set;
     }
 
-public string Commentaire
+    public string Commentaire
     {
         get;
         set;
@@ -44,13 +49,18 @@ public string Commentaire
 
     public enum Motif
     {
-        Motif,Accident,ClientAbsentImpossible
+        Aucun,Accident,ClientAbsentImpossible
     }
 
-public enum Statut
+    public enum Statut
     {
         Valide,
         Attente,
         Rate
     }
+
+    public Chauffeur? ChauffeurLivraison { get; set; }
+    public Client ClientLivraison { get; set; }
+
+    public Camion? CamionLivraison { get; set; }
 }

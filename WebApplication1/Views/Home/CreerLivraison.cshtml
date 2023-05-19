@@ -1,32 +1,42 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @attribute [Authorize(Roles = "Client")]
+@model WebApplication1.Models.Livraison
+
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Création d'une Livraison";
 }
 <div class="container">
     <h1 class="display-4 me-4">Création d'une Livraison:</h1>
-    <form>
+    <form enctype="multipart/form-data" asp-controller="Home" asp-action="CreerLivraison">
         <div class="mb-3">
             <label for="lieuChargement" class="form-label">Lieu de Chargement</label>
-            <textarea class="form-control" id="lieuChargment" rows="3"></textarea>
+            <input asp-for="LieuChargement" type="text" class="form-control" id="lieuChargment" >
         </div>
         <div class="mb-3">
             <label for="dateChargement" class="form-label">Date de Chargement</label>
-            <input type="datetime" class="form-control" id="dateChargement" pattern="^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\d\d\d\d\s-\s([0-1]?[0-9]|2?[0-3]):([0-5]\d)$">
+            <input asp-for="DateChargement" type="date" class="form-control" id="dateChargement" >
         </div>
         <div class="mb-3">
+                    <label for="heureChargement" class="form-label">Heure de Chargement</label>
+            <input asp-for="HeureChargement" type="time" class="form-control" id="heureChargement" >
+            </div>
+        <div class="mb-3">
             <label for="lieuDechargement" class="form-label">Lieu de Déchargement</label>
-            <textarea class="form-control" id="lieuDechargement" rows="3"></textarea>
+            <input asp-for="LieuDechargement" type="text" class="form-control" id="lieuDechargement" >
         </div>
         <div class="mb-3">
             <label for="dateDechargement" class="form-label">Date de Déchargement</label>
-            <input type="datetime" class="form-control" id="dateDechargement" pattern="^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\d\d\d\d\s-\s([0-1]?[0-9]|2?[0-3]):([0-5]\d)$">
+            <input asp-for="DateDechargement" type="date" class="form-control" id="dateDechargement" >
         </div>
         <div class="mb-3">
+            <label for="heureDechargementPrevu" class="form-label">Heure de Dechargement</label>
+            <input asp-for="HeureDechargementPrevu" type="time" class="form-control" id="heureDechargementPrevu" >
+            </div>
+        <div class="mb-3">
             <label for="contenu" class="form-label">Contenu</label>
-            <textarea class="form-control" id="contenu" rows="7"></textarea>
+            <input asp-for="Contenu" type="text" class="form-control" id="contenu" >
         </div>
         <button class="btn btn-primary " type="submit">Valider la Livraison</button>
     </form>

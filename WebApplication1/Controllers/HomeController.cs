@@ -193,6 +193,27 @@ public class HomeController : Controller
     {
         return PartialView();
     }
+    [Authorize(Roles = "Client")][HttpPost][ValidateAntiForgeryToken]
+
+    public async Task<IActionResult> CreerLivraison([FromServices]UserManager<IdentityUser>userManager,Livraison livraison)
+    {
+        livraison.StatutLivraison = Models.Livraison.Statut.Attente;
+        livraison.Commentaire = ".";
+        livraison.MotifLivraison = Models.Livraison.Motif.Aucun;
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
+        livraison.ClientLivraison = userCasted;
+        livraison.CamionLivraison=null;
+        //DateTime chargement = DateTime.Parse(livraison.DateChargement,"yyyy-MM-dd");
+
+
+        _context.Livraison.Add(livraison);
+        await _context.SaveChangesAsync();
+        
+        return RedirectToAction("Livraison");
+            
+
+    }
     
     [Authorize(Roles = "Chauffeur")]
     public IActionResult LivraisonDispatch()
