@@ -204,15 +204,20 @@ public class HomeController : Controller
         var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
         livraison.ClientLivraison = userCasted;
         livraison.CamionLivraison=null;
-        //DateTime chargement = DateTime.Parse(livraison.DateChargement,"yyyy-MM-dd");
+        DateTime chargement = DateTime.ParseExact(livraison.DateChargement+" "+livraison.HeureChargement,"yyyy-MM-dd HH:mm",System.Globalization.CultureInfo.InvariantCulture);
+        DateTime dechargement = DateTime.ParseExact(livraison.DateDechargement+" "+livraison.HeureDechargementPrevu,"yyyy-MM-dd HH:mm",System.Globalization.CultureInfo.InvariantCulture);
 
+        if (DateTime.Compare(chargement, DateTime.Now) >= 0)
+        {
+            if (DateTime.Compare(chargement, dechargement) < 0)
+            {
+                _context.Livraison.Add(livraison);
+                await _context.SaveChangesAsync();
 
-        _context.Livraison.Add(livraison);
-        await _context.SaveChangesAsync();
-        
+            }
+        }
+
         return RedirectToAction("Livraison");
-            
-
     }
     
     [Authorize(Roles = "Chauffeur")]
