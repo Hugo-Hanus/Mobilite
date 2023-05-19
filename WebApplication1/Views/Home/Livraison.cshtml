@@ -20,7 +20,6 @@
       </tr>
       </thead>
       <tbody>
-      @RenderSection("ListLivraison")
       </tbody>
     </table>
   </div>
@@ -34,38 +33,8 @@
       </tr>
       </thead>
       <tbody>
-      @RenderSection("ListLivreeLivraison")
+      
       </tbody>
     </table>
   </div>
 </div>
-
-
-@section ListLivraison{
-  @foreach (Livraison livraison in Model)/* in List<Livraison>*/
-  {
-    <tr>
-      <th scope="row">Livraison @livraison.ID</th>
-      @if(@livraison.StatutLivraison ==Livraison.Statut.Valide){
-        <td><span class="badge rounded-pill bg-warning text-dark"> @livraison.StatutLivraison </span></td>
-        <td></td>
-      }
-      else
-      {
-        <td><span class="badge rounded-pill bg-danger">En cours</span></td>
-        <td><a class="btn btn-secondary btn-sm" asp-action=""/>Modifier</td>
-      }
-      <td></td>
-    </tr>
-  }
-}
-
-@section ListLivreeLivraison{
-  @foreach (Livraison livraisonLivree in Model)
-  {
-    <tr>
-      <th scope="row">Livraison @livraisonLivree.ID</th>
-      <td><span class="badge rounded-pill bg-success">@livraisonLivree.StatutLivraison</span></td>
-    </tr>
-  }
-}

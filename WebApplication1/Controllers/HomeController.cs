@@ -193,6 +193,32 @@ public class HomeController : Controller
     {
         return PartialView();
     }
+    [Authorize(Roles = "Client")][HttpPost][ValidateAntiForgeryToken]
+
+    public async Task<IActionResult> CreerLivraison([FromServices]UserManager<IdentityUser>userManager,Livraison livraison)
+    {
+        livraison.StatutLivraison = Models.Livraison.Statut.Attente;
+        livraison.Commentaire = ".";
+        livraison.MotifLivraison = Models.Livraison.Motif.Aucun;
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
+        livraison.ClientLivraison = userCasted;
+        livraison.CamionLivraison=null;
+        DateTime chargement = DateTime.ParseExact(livraison.DateChargement+" "+livraison.HeureChargement,"yyyy-MM-dd HH:mm",System.Globalization.CultureInfo.InvariantCulture);
+        DateTime dechargement = DateTime.ParseExact(livraison.DateDechargement+" "+livraison.HeureDechargementPrevu,"yyyy-MM-dd HH:mm",System.Globalization.CultureInfo.InvariantCulture);
+
+        if (DateTime.Compare(chargement, DateTime.Now) >= 0)
+        {
+            if (DateTime.Compare(chargement, dechargement) < 0)
+            {
+                _context.Livraison.Add(livraison);
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
+        return RedirectToAction("Livraison");
+    }
     
     [Authorize(Roles = "Chauffeur")]
     public IActionResult LivraisonDispatch()
