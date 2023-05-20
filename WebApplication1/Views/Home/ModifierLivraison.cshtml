@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@attribute [Authorize(Roles = "Client")]
+@model WebApplication1.Models.Livraison
+
+@{
+    Layout = "_Layout";  
+    ViewData["Title"] = "Modifier une Livraison";
+}
+@section Scripts {
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+            var dateChargementElement = document.getElementById('dateChargement');
+            var heureChargementElement = document.getElementById('heureChargement');
+            var dateDechargementElement = document.getElementById('dateDechargement');
+            var heureDechargementPrevuElement = document.getElementById('heureDechargementPrevu');
+
+            var dateChargement = new Date(dateChargementElement.value + "T" + heureChargementElement.value);
+            var dateDechargement = new Date(dateDechargementElement.value + "T" + heureDechargementPrevuElement.value);
+            var now = new Date();
+
+            if (dateChargement >= dateDechargement) {
+                alert('La date de déchargement doit être postérieure à la date de chargement.');
+                event.preventDefault();
+            }
+            else if (dateChargement < now || dateDechargement < now) {
+                alert("La date de chargement et de déchargement ne peut pas être antérieure à aujourd'hui.");
+                event.preventDefault();
+            }
+        });
+    </script>
+}
+<div class="container">
+    <h1 class="display-4 me-4">Création d'une Livraison:</h1>
+    <form enctype="multipart/form-data" asp-controller="Home" asp-action="ModifierLivraison" >
+        <div class="mb-3">
+            <label for="lieuChargement" class="form-label">Lieu de Chargement</label>
+            <input asp-for="LieuChargement" type="text" class="form-control" id="lieuChargment" >
+        </div>
+        <div class="mb-3">
+            <label for="dateChargement" class="form-label">Date de Chargement</label>
+            <input asp-for="DateChargement" type="date" class="form-control" id="dateChargement" >
+        </div>
+        <div class="mb-3">
+                    <label for="heureChargement" class="form-label">Heure de Chargement</label>
+            <input asp-for="HeureChargement" type="time" class="form-control" id="heureChargement" >
+            </div>
+        <div class="mb-3">
+            <label for="lieuDechargement" class="form-label">Lieu de Déchargement</label>
+            <input asp-for="LieuDechargement" type="text" class="form-control" id="lieuDechargement" >
+        </div>
+        <div class="mb-3">
+            <label for="dateDechargement" class="form-label">Date de Déchargement</label>
+            <input asp-for="DateDechargement" type="date" class="form-control" id="dateDechargement" >
+        </div>
+        <div class="mb-3">
+            <label for="heureDechargementPrevu" class="form-label">Heure de Dechargement</label>
+            <input asp-for="HeureDechargementPrevu" type="time" class="form-control" id="heureDechargementPrevu" >
+            </div>
+        <div class="mb-3">
+            <label for="contenu" class="form-label">Contenu</label>
+            <input asp-for="Contenu" type="text" class="form-control" id="contenu" >
+        </div>
+        <button class="btn btn-primary " type="submit">Modifier la Livraison</button>
+    </form>
+</div>
