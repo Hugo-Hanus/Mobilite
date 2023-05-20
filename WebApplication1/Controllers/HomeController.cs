@@ -336,10 +336,13 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Admin")]
-    public IActionResult Clientliste()
+    public async Task<IActionResult> Clientliste([FromServices]UserManager<IdentityUser>userManager)
     {
-        return PartialView();
+        var users = await userManager.GetUsersInRoleAsync("Client");
+        var clients = users.OfType<Client>().ToList();
+        return PartialView(clients);
     }
+    
     
     [Authorize(Roles = "Admin")]
     public IActionResult Statistique()
@@ -565,6 +568,23 @@ public class HomeController : Controller
             
         }
         return RedirectToAction("Index");
+
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> UpdateClientStatus(string id, bool isMauvaisPayeur)
+    {
+        
+        var client = await _context.Users.OfType<Client>().FirstOrDefaultAsync(c => c.Id == id);
+        if (client == null)
+        {
+            return NotFound();
+        }
+
+        client.isMauvaisPayeur = isMauvaisPayeur;
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Clientliste");
 
     }
 }
