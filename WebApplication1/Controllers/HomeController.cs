@@ -172,9 +172,18 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Client")]
-    public IActionResult Livraison()
+    public async Task<IActionResult> Livraison()
     {
-        return PartialView();
+        //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
+
+        var livraisonsEnAttente = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && l.StatutLivraison==Models.Livraison.Statut.Attente).ToListAsync();
+        var livraisonFini = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && (l.StatutLivraison == Models.Livraison.Statut.Valide || l.StatutLivraison == Models.Livraison.Statut.Rate)).ToListAsync();
+        var LivrasionVm = new LivraisonViewModel();
+        LivrasionVm.LivraisonsFini = livraisonFini;
+        LivrasionVm.LivraisonsEnAttente = livraisonsEnAttente;
+        return View(LivrasionVm);
     }
     
     [Authorize(Roles = "Dispatcher")]
@@ -187,8 +196,45 @@ public class HomeController : Controller
     {
         return PartialView();
     }
+
     [Authorize(Roles = "Client")]
 
+    public IActionResult ModifierLivraison(int id)
+    {
+        var livraison = _context.Livraison.FirstOrDefault(l => l.ID == id);
+        if (livraison == null)
+        {
+            return RedirectToAction("Index");
+        }
+        return View(livraison);
+    }
+    
+    [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Client")]
+    public IActionResult ModifierLivraison(Livraison model)
+    {
+        
+        var livraison = _context.Livraison.FirstOrDefault(l => l.ID == model.ID);
+        if (livraison == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        
+        livraison.LieuChargement = model.LieuChargement;
+        livraison.DateChargement = model.DateChargement;
+        livraison.HeureChargement = model.HeureChargement;
+        livraison.HeureDechargementPrevu = model.HeureDechargementPrevu;
+        livraison.Contenu = model.Contenu;
+        livraison.DateDechargement = model.DateDechargement;
+        livraison.LieuDechargement = model.LieuDechargement;
+        
+        _context.Update(livraison);
+        _context.SaveChanges();
+
+        return RedirectToAction("Livraison");
+    }
+    
+    [Authorize(Roles = "Client")]
     public IActionResult CreerLivraison()
     {
         return PartialView();
