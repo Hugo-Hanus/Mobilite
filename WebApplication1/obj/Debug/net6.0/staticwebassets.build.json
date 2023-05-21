@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "q85hVfW9q2glxkePKp/uu5coxeii2ufE/nX2Zry/FFs=",
+  "Hash": "hdhOxLCzTGTTJ79JVFiMa9vkV8AwoPHx6pBErLokDQs=",
   "Source": "WebApplication1",
   "BasePath": "_content/WebApplication1",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Timotei\\Documents\\WebAvancé\\175\\HELMo-bilite\\WebApplication1\\wwwroot\\img\\b8c0adb8-f497-4c4a-b3f4-6b2aca46d251_facetube.PNG",
+      "SourceId": "WebApplication1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Timotei\\Documents\\WebAvancé\\175\\HELMo-bilite\\WebApplication1\\wwwroot\\",
+      "BasePath": "_content/WebApplication1",
+      "RelativePath": "img/b8c0adb8-f497-4c4a-b3f4-6b2aca46d251_facetube.PNG",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\b8c0adb8-f497-4c4a-b3f4-6b2aca46d251_facetube.PNG"
     },
     {
       "Identity": "C:\\Users\\Timotei\\Documents\\WebAvancé\\175\\HELMo-bilite\\WebApplication1\\wwwroot\\img\\d0e6290b-81f1-4428-86be-810aead4e29f_SkodaRapidSpaceBack.jpg",
