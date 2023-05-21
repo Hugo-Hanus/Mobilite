@@ -291,9 +291,14 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Admin")]
-    public IActionResult GestionEffectif()
+    public async Task<IActionResult> GestionEffectif()
     {
-        return PartialView();
+        List<Chauffeur> chauffeurs = await _context.Users.OfType<Chauffeur>().ToListAsync();
+        List<Camion> camions = await _context.Camions.ToListAsync();
+        var ViewModel = new GestionEffectifViewModel();
+        ViewModel.Camions = camions;
+        ViewModel.Chauffeurs = chauffeurs;
+        return View(ViewModel);
     }
     
     [Authorize(Roles = "Admin")]
@@ -306,8 +311,7 @@ public class HomeController : Controller
     [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Admin")]
     public async Task<IActionResult> AjouterCamion(Camion camion, IFormFile Img)
     {
-        if (ModelState.IsValid)
-        {
+        
             Camion t = camion;
             if (Img != null && Img.Length > 0)
             {
@@ -326,13 +330,15 @@ public class HomeController : Controller
                 }
 
                 camion.Img = $"~/img/{imgFileName}";
+            }else
+            {
+                View(camion);
             }
-
+            
             _context.Camions.Add(camion);
             await _context.SaveChangesAsync();
-        }
-
-        return RedirectToAction("Index");
+            
+        return RedirectToAction("GestionEffectif");
     }
     
     [Authorize(Roles = "Admin")]
@@ -571,7 +577,8 @@ public class HomeController : Controller
 
     }
     
-    [HttpPost]
+    [HttpPost][Authorize(Roles = "Admin")]
+
     public async Task<IActionResult> UpdateClientStatus(string id, bool isMauvaisPayeur)
     {
         
@@ -586,5 +593,90 @@ public class HomeController : Controller
 
         return RedirectToAction("Clientliste");
 
+    }
+    
+    [Authorize(Roles = "Admin")][HttpGet]
+    public async Task<IActionResult> ModificationCamion(int id)
+    {
+        var camion = await _context.Camions.FindAsync(id);
+
+        if (camion == null)
+        {
+            return RedirectToAction("GestionEffectif");
+        }
+
+        return View(camion);
+    }
+    
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ModificationCamion(Camion camion, IFormFile Img)
+    {
+        var existingCamion = await _context.Camions.FindAsync(camion.ID);
+        if (Img != null && Img.Length > 0 )
+        {
+            var oldImgPath = existingCamion.Img;
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+
+            var imgFileName = $"{Guid.NewGuid()}_{Img.FileName}";
+            var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+            
+            if (!string.Equals(oldImgPath, $"~/img/{imgFileName}", StringComparison.OrdinalIgnoreCase))
+            {
+                var imgFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", oldImgPath.TrimStart('~', '/'));
+
+                if (System.IO.File.Exists(imgFullPath))
+                {
+                    System.IO.File.Delete(imgFullPath);
+                }
+                
+                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                {
+                    await Img.CopyToAsync(fileStream);
+                }
+
+                camion.Img = $"~/img/{imgFileName}";
+            }
+        }else
+        {
+            View(camion);
+        }
+
+        existingCamion.Immatriculation = camion.Immatriculation;
+        existingCamion.Marque = camion.Marque;
+        existingCamion.Modele = camion.Modele;
+        existingCamion.Tonnage = camion.Tonnage;
+        existingCamion.Type = camion.Type;
+        _context.Update(existingCamion);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("GestionEffectif");
+    }
+
+    [HttpPost][Authorize(Roles = "Admin")]
+    public async Task<IActionResult> SupprimerCamion([FromForm] int id)
+    {
+        var camion = await _context.Camions.FindAsync(id);
+
+        if (camion == null)
+        {
+            return RedirectToAction("GestionEffectif");
+        }
+        
+        var imgFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", camion.Img.TrimStart('~', '/'));
+
+        if (System.IO.File.Exists(imgFullPath))
+        {
+            System.IO.File.Delete(imgFullPath);
+        }
+    
+        _context.Camions.Remove(camion);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("GestionEffectif");
     }
 }
