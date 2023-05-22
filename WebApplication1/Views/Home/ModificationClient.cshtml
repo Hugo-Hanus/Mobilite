@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@attribute [Authorize(Roles = "Client")]
+
+@{
+  Layout = "_Layout";  
+    ViewData["Title"] = "ModificationClient";
+}
+@section Scripts {
+    <script>
+        function checkPassword() {
+            var motDePasse = document.getElementById('passwordUser').value;
+            var motDePasseConfirm = document.getElementById('passwordUserConfirm').value;
+
+            if (motDePasse !== motDePasseConfirm) {
+                alert("Les mots de passe ne correspondent pas.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+}
+
+<div class="container">
+    <h1 class="display-4">Modification profil - Client:</h1>
+    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="ModificationClient" onsubmit="return checkPassword();">
+        <div class="form-group mb-3">
+            <label for="entrepriseName">Nom de L'entreprise</label>
+            <input type="text" class="form-control" id="entrepriseName" placeholder="Nom de l'entreprise" name="entrepriseName">
+        </div>
+        <div class="form-group mb-3">
+            <label for="email">Adresse Mail</label>
+            <input  type="email" class="form-control" id="mail" placeholder="Adresse mail" name="email">
+        </div>
+        <div class="form-group mb-3">
+            <label for="passwordUser">Mot de passe</label>
+            <input  type="password" class="form-control" id="passwordUser" placeholder="Mot de passe" name="passwordUser">
+        </div>
+        <div class="form-group mb-3">
+            <label for="passwordUserConfirm">Confirmation du mot de passe</label>
+            <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe" name="passwordUserConfirm">
+        </div>
+        <div class="form-group mb-3">
+            <label for="adress">Adresse </label>
+            <div class="d-flex mb-3">
+                <input  type="text" class="form-control" id="road" placeholder="Rue" name="rue">
+                <input  type="number" class="form-control" id="numberRoad" placeholder="Numéro" name="numero">
+                <input  type="number" class="form-control" id="postalCode" placeholder="Code Postal" name="codePostal">
+            </div>
+            <div class="d-flex mb-3">
+                <input  type="text" class="form-control" id="localite" placeholder="Localité" name="localite">
+                <input  type="text" class="form-control" id="pays" placeholder="Pays" name="pays">
+            </div>
+            <div class="d-grid mb-3" >
+                        <label for="logo">Image logo entreprise</label>
+                <input type="file" class="form-control-file" id="logo" name="logo">
+                </div>
+        </div>
+    <button type="submit" class="btn btn-success">Ajouter</button>
+
+    </form>
+
+</div>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
@@ -17,24 +18,43 @@ public class AccountController : Controller
 
    
     
-    [HttpPost]
-    public async Task<IActionResult> InscriptionClientPost(Client client)
+    [HttpPost][ValidateAntiForgeryToken]
+    public async Task<IActionResult> InscriptionClientPost([FromServices]UserManager<IdentityUser> userManager, [FromServices]SignInManager<IdentityUser> signInManager, Client client)
     {
-        _context.Clients.Add(client);
-        await _context.SaveChangesAsync();
-        return RedirectToAction("Index","Home");
+        if (ModelState.IsValid)
+        {
+
+            var userIdentity = new IdentityUser(client.NomEntreprise);
+            userIdentity.Email = client.Email;
+            var result = await userManager.CreateAsync(userIdentity, client.MotDePasse);
+            
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(userIdentity, "Client"); 
+                await signInManager.SignInAsync(userIdentity, false);
+                
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+                var uploadPath2 = Path.Combine(uploadPath, "logo", client.NomEntreprise);
+                Directory.CreateDirectory(uploadPath2);
+            }
+            
+            
+        }
+
+        return RedirectToAction("Index", "Home");
     }
     [HttpPost]
     public async Task<IActionResult> ModificationClientPost(Client client)
     {
-        using (_context)
+        /**using (_context)
         {
-            /*var userInfo = _context.Clients.Single(client => client.ID == 1);
+            var userInfo = _context.Clients.Single(client => client.Id == 1);
             var camion = _context.Camions
                 .Where(b => b.ID == 1)
-                .Select(b => new { b.ID, b.Marque, b.Modèle }).FirstOrDefault();*/
+                .Select(b => new { b.ID, b.Marque, b.Modele }).FirstOrDefault();
         }
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Home"); **/
+        return null;
     }
 
     [HttpPost]

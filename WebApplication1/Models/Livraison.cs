@@ -29,6 +29,7 @@ public class Livraison
     [Required] public string LieuDechargement { get; set; }
     [Required] public string DateChargement { get; set; }
     [Required] public string DateDechargement { get; set; }
+
     [Required] public string Contenu { get; set; }
     [Required] public string HeureChargement { get; set; }
     [Required] public string HeureDechargementPrevu { get; set; }
@@ -59,7 +60,7 @@ public class Livraison
     }
 
     public Chauffeur? ChauffeurLivraison { get; set; }
-    public Client? ClientLivraison { get; set; }
+    public Client ClientLivraison { get; set; }
 
     public Camion? CamionLivraison { get; set; }
 }

@@ -4,12 +4,12 @@
 @{
   Layout = "_Layout";  
     ViewData["Title"] = "Livraison";
-  @model List<Livraison>
+  @model LivraisonViewModel
 }
 <div class="container">
   <h2 class="display-4">Livraison :</h2>
   <a class="btn btn-secondary" asp-controller="Home" asp-action="CreerLivraison">Créer une Livraison</a>
-  <h2 class="display-4">Historique</h2>
+  <h2 class="display-4">En cours</h2>
   <div class="mb-5">
     <table class="table table-striped">
       <thead>
@@ -20,11 +20,22 @@
       </tr>
       </thead>
       <tbody>
-      @RenderSection("ListLivraison")
+      @foreach (var livraison in Model.LivraisonsEnAttente)
+      {
+        <tr>
+          <td>@livraison.Contenu</td>
+          <td>@livraison.StatutLivraison</td>
+          <td>
+            <a asp-controller="Home" asp-action="ModifierLivraison" asp-route-id="@livraison.ID" class="btn btn-primary">Modifier</a>
+          </td>
+        </tr>
+      }
+
       </tbody>
     </table>
   </div>
   <hr class="hr hr-blurry mb-5" />
+  <h2 class="display-4">Historique</h2>
   <div>
     <table class="table table-striped">
       <thead>
@@ -34,38 +45,14 @@
       </tr>
       </thead>
       <tbody>
-      @RenderSection("ListLivreeLivraison")
+       @foreach (var livraison in Model.LivraisonsFini)
+            {
+              <tr>
+                <td>@livraison.Contenu</td>
+                <td>@livraison.StatutLivraison</td>
+              </tr>
+            }
       </tbody>
     </table>
   </div>
 </div>
-
-
-@section ListLivraison{
-  @foreach (Livraison livraison in Model)/* in List<Livraison>*/
-  {
-    <tr>
-      <th scope="row">Livraison @livraison.ID</th>
-      @if(@livraison.StatutLivraison ==Livraison.Statut.Valide){
-        <td><span class="badge rounded-pill bg-warning text-dark"> @livraison.StatutLivraison </span></td>
-        <td></td>
-      }
-      else
-      {
-        <td><span class="badge rounded-pill bg-danger">En cours</span></td>
-        <td><a class="btn btn-secondary btn-sm" asp-action=""/>Modifier</td>
-      }
-      <td></td>
-    </tr>
-  }
-}
-
-@section ListLivreeLivraison{
-  @foreach (Livraison livraisonLivree in Model)
-  {
-    <tr>
-      <th scope="row">Livraison @livraisonLivree.ID</th>
-      <td><span class="badge rounded-pill bg-success">@livraisonLivree.StatutLivraison</span></td>
-    </tr>
-  }
-}

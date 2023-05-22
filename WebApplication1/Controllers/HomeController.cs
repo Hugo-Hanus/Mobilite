@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WebApplication1.ViewModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,9 +27,9 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        List<Client> listClients = new List<Client>();
-            listClients.Add(new Client());
-            return PartialView("Index",listClients);
+        List<Client> listClients=new List<Client>();
+        listClients= _context.Clients.ToList();
+        return PartialView("Index",listClients);
     }
 
     public IActionResult Privacy()
@@ -42,20 +44,15 @@ public class HomeController : Controller
     [HttpPost][ValidateAntiForgeryToken]
     public async Task<IActionResult> InscriptionClient([FromServices]UserManager<IdentityUser> userManager, [FromServices]SignInManager<IdentityUser> signInManager, Client client)
     {
-        if (ModelState.IsValid)
-        {
-
-            var userIdentity = new IdentityUser(client.NomEntreprise);
-            userIdentity.Email = client.Email;
-            var result = await userManager.CreateAsync(userIdentity, client.MotDePasse);
-            
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(userIdentity, "Client"); 
-                await signInManager.SignInAsync(userIdentity, false);
-            }
-        }
-
+        var mdp = client.MotDePasse;
+        client.MotDePasse = null;
+        client.UserName = client.NomEntreprise;
+        await userManager.CreateAsync(client, mdp);
+        await userManager.AddToRoleAsync(client, "Client"); 
+        await signInManager.SignInAsync(client, false); 
+        
+        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","logo",client.Email);
+        Directory.CreateDirectory(uploadPath);
         return RedirectToAction("Index");
     } 
     public IActionResult InscriptionMembre()
@@ -105,6 +102,8 @@ public class HomeController : Controller
 
             if (password.Equals(passwordConfirm))
             {
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","profilPic",dispatcher.Email);
+                Directory.CreateDirectory(uploadPath);
                 await userManager.CreateAsync(dispatcher, password);
                 await userManager.AddToRoleAsync(dispatcher, "Dispatcher");
                 await signInManager.SignInAsync(dispatcher, false);
@@ -145,6 +144,8 @@ public class HomeController : Controller
             
             if (password.Equals(passwordConfirm))
             {
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","profilPic",chauffeur.Email);
+                Directory.CreateDirectory(uploadPath);
                 await userManager.CreateAsync(chauffeur, password);
                 await userManager.AddToRoleAsync(chauffeur, "Chauffeur");
                 await signInManager.SignInAsync(chauffeur, false);
@@ -174,9 +175,18 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Client")]
-    public IActionResult Livraison()
+    public async Task<IActionResult> Livraison()
     {
-        return PartialView();
+        //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
+
+        var livraisonsEnAttente = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && l.StatutLivraison==Models.Livraison.Statut.Attente).ToListAsync();
+        var livraisonFini = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && (l.StatutLivraison == Models.Livraison.Statut.Valide || l.StatutLivraison == Models.Livraison.Statut.Rate)).ToListAsync();
+        var LivrasionVm = new LivraisonViewModel();
+        LivrasionVm.LivraisonsFini = livraisonFini;
+        LivrasionVm.LivraisonsEnAttente = livraisonsEnAttente;
+        return View(LivrasionVm);
     }
     
     [Authorize(Roles = "Dispatcher")]
@@ -252,12 +262,61 @@ public class HomeController : Controller
     
 }
 
+    [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Client")]
+    public IActionResult ModifierLivraison(Livraison model)
+    {
+        
+        var livraison = _context.Livraison.FirstOrDefault(l => l.ID == model.ID);
+        if (livraison == null)
+        {
+            return RedirectToAction("Index");
+        }
 
+        
+        livraison.LieuChargement = model.LieuChargement;
+        livraison.DateChargement = model.DateChargement;
+        livraison.HeureChargement = model.HeureChargement;
+        livraison.HeureDechargementPrevu = model.HeureDechargementPrevu;
+        livraison.Contenu = model.Contenu;
+        livraison.DateDechargement = model.DateDechargement;
+        livraison.LieuDechargement = model.LieuDechargement;
+        
+        _context.Update(livraison);
+        _context.SaveChanges();
+
+        return RedirectToAction("Livraison");
+    }
     
     [Authorize(Roles = "Client")]
     public IActionResult CreerLivraison()
     {
         return PartialView();
+    }
+    [Authorize(Roles = "Client")][HttpPost][ValidateAntiForgeryToken]
+
+    public async Task<IActionResult> CreerLivraison([FromServices]UserManager<IdentityUser>userManager,Livraison livraison)
+    {
+        livraison.StatutLivraison = Models.Livraison.Statut.Attente;
+        livraison.Commentaire = ".";
+        livraison.MotifLivraison = Models.Livraison.Motif.Aucun;
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
+        livraison.ClientLivraison = userCasted;
+        livraison.CamionLivraison=null;
+        DateTime chargement = DateTime.ParseExact(livraison.DateChargement+" "+livraison.HeureChargement,"yyyy-MM-dd HH:mm",System.Globalization.CultureInfo.InvariantCulture);
+        DateTime dechargement = DateTime.ParseExact(livraison.DateDechargement+" "+livraison.HeureDechargementPrevu,"yyyy-MM-dd HH:mm",System.Globalization.CultureInfo.InvariantCulture);
+
+        if (DateTime.Compare(chargement, DateTime.Now) >= 0)
+        {
+            if (DateTime.Compare(chargement, dechargement) < 0)
+            {
+                _context.Livraison.Add(livraison);
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
+        return RedirectToAction("Livraison");
     }
     
     [Authorize(Roles = "Chauffeur")]
@@ -285,9 +344,14 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Admin")]
-    public IActionResult GestionEffectif()
+    public async Task<IActionResult> GestionEffectif()
     {
-        return PartialView();
+        List<Chauffeur> chauffeurs = await _context.Users.OfType<Chauffeur>().ToListAsync();
+        List<Camion> camions = await _context.Camions.ToListAsync();
+        var ViewModel = new GestionEffectifViewModel();
+        ViewModel.Camions = camions;
+        ViewModel.Chauffeurs = chauffeurs;
+        return View(ViewModel);
     }
     
     [Authorize(Roles = "Admin")]
@@ -300,8 +364,7 @@ public class HomeController : Controller
     [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Admin")]
     public async Task<IActionResult> AjouterCamion(Camion camion, IFormFile Img)
     {
-        if (ModelState.IsValid)
-        {
+        
             Camion t = camion;
             if (Img != null && Img.Length > 0)
             {
@@ -320,20 +383,25 @@ public class HomeController : Controller
                 }
 
                 camion.Img = $"~/img/{imgFileName}";
+            }else
+            {
+                View(camion);
             }
-
+            
             _context.Camions.Add(camion);
             await _context.SaveChangesAsync();
-        }
-
-        return RedirectToAction("Index");
+            
+        return RedirectToAction("GestionEffectif");
     }
     
     [Authorize(Roles = "Admin")]
-    public IActionResult Clientliste()
+    public async Task<IActionResult> Clientliste([FromServices]UserManager<IdentityUser>userManager)
     {
-        return PartialView();
+        var users = await userManager.GetUsersInRoleAsync("Client");
+        var clients = users.OfType<Client>().ToList();
+        return PartialView(clients);
     }
+    
     
     [Authorize(Roles = "Admin")]
     public IActionResult Statistique()
@@ -379,5 +447,304 @@ public class HomeController : Controller
 
         return RedirectToAction("Index");
 
+    }
+
+    [Authorize(Roles = "Client")]
+    
+    public IActionResult ModificationClient()
+    {
+        return PartialView();
+    }
+    [Authorize(Roles = "Client")][HttpPost][ValidateAntiForgeryToken]
+    public async Task<IActionResult> ModificationClient([FromServices]UserManager<IdentityUser>userManager,IFormFile Logo, [FromForm] IFormCollection form)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
+            
+            if (!form["Pays"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Pays = form["Pays"].FirstOrDefault();
+
+            } 
+            if (!form["codePostal"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.CodePostal = int.Parse(form["codePostal"].FirstOrDefault());
+
+            } 
+            if (!form["rue"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Rue = form["rue"].FirstOrDefault();
+
+            } 
+            if (!form["numero"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Numero = int.Parse(form["numero"].FirstOrDefault());
+
+            } 
+            if (!form["email"].FirstOrDefault().IsNullOrEmpty())
+            {
+               /** userCasted.Email = form["email"].FirstOrDefault();
+                userCasted.NormalizedEmail = form["email"].FirstOrDefault().ToUpper(); **/
+            } 
+            if (!form["entrepriseName"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.NomEntreprise = form["entrepriseName"].FirstOrDefault();
+
+            }
+
+            if (!form["localite"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Localite = form["localite"].FirstOrDefault();
+
+            }
+            if (!form["passwordUserConfirm"].FirstOrDefault().IsNullOrEmpty() && !form["passwordUser"].FirstOrDefault().IsNullOrEmpty())
+            {
+                if (form["passwordUserConfirm"].FirstOrDefault().Equals(form["passwordUser"].FirstOrDefault()))
+                {
+                    //userManager.ResetPasswordAsync(userCasted,)
+                }
+            }
+            
+                if (Logo != null && Logo.Length > 0)
+                {
+                    var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logo",userCasted.Email);
+
+                    var imgFileName = $"{Guid.NewGuid()}_{Logo.FileName}";
+                    var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+
+                    using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                    {
+                        await Logo.CopyToAsync(fileStream);
+                    }
+                    userCasted.logo = $"~/img/{imgFileName}";
+
+                }
+                await userManager.UpdateAsync(userCasted);
+                await _context.SaveChangesAsync();
+            }
+        return RedirectToAction("Index");
+
+    }
+    
+    [Authorize(Roles = "Dispatcher")]
+    public IActionResult ModificationDispatcher()
+    {
+        return PartialView();
+    }
+
+    [Authorize(Roles = "Dispatcher")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ModificationDispatcher([FromServices] UserManager<IdentityUser> userManager,IFormFile profil, [FromForm] IFormCollection form)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userCasted = await _context.Users.OfType<Dispatcher>().SingleOrDefaultAsync(u => u.Id == userId);
+            
+            if (!form["dateNaissance"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.DateNaissance = form["dateNaissance"].FirstOrDefault();
+
+            }
+            if (!form["nom"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Nom = form["nom"].FirstOrDefault();
+
+            }
+            if (!form["prenom"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Prenom = form["prenom"].FirstOrDefault();
+
+            }
+            if (!form["matricule"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Matricule = form["matricule"].FirstOrDefault();
+
+            }
+            if (profil != null && profil.Length > 0)
+            {
+                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+
+                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
+                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+
+                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                {
+                    await profil.CopyToAsync(fileStream);
+                }
+                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+
+            }
+            
+            await userManager.UpdateAsync(userCasted);
+            await _context.SaveChangesAsync();
+            
+        }
+        return RedirectToAction("Index");
+    }
+
+    [Authorize(Roles = "Chauffeur")]
+    public IActionResult ModificationChauffeur()
+    {
+        return PartialView();
+    }
+
+    [Authorize(Roles = "Chauffeur")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ModificationChauffeur([FromServices] UserManager<IdentityUser> userManager, IFormFile profil, [FromForm] IFormCollection form)
+    {
+        if (User.Identity.IsAuthenticated)
+        {
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userCasted = await _context.Users.OfType<Chauffeur>().SingleOrDefaultAsync(u => u.Id == userId);
+            
+            if (!form["dateNaissance"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.DateNaissance = form["dateNaissance"].FirstOrDefault();
+
+            }
+            if (!form["nom"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Nom = form["nom"].FirstOrDefault();
+
+            }
+            if (!form["prenom"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Prenom = form["prenom"].FirstOrDefault();
+
+            }
+            if (!form["matricule"].FirstOrDefault().IsNullOrEmpty())
+            {
+                userCasted.Matricule = form["matricule"].FirstOrDefault();
+
+            }
+            if (profil != null && profil.Length > 0)
+            {
+                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+
+                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
+                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+
+                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                {
+                    await profil.CopyToAsync(fileStream);
+                }
+                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+
+            }
+            
+            await userManager.UpdateAsync(userCasted);
+            await _context.SaveChangesAsync();
+            
+        }
+        return RedirectToAction("Index");
+
+    }
+    
+    [HttpPost][Authorize(Roles = "Admin")]
+
+    public async Task<IActionResult> UpdateClientStatus(string id, bool isMauvaisPayeur)
+    {
+        
+        var client = await _context.Users.OfType<Client>().FirstOrDefaultAsync(c => c.Id == id);
+        if (client == null)
+        {
+            return NotFound();
+        }
+
+        client.isMauvaisPayeur = isMauvaisPayeur;
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Clientliste");
+
+    }
+    
+    [Authorize(Roles = "Admin")][HttpGet]
+    public async Task<IActionResult> ModificationCamion(int id)
+    {
+        var camion = await _context.Camions.FindAsync(id);
+
+        if (camion == null)
+        {
+            return RedirectToAction("GestionEffectif");
+        }
+
+        return View(camion);
+    }
+    
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ModificationCamion(Camion camion, IFormFile Img)
+    {
+        var existingCamion = await _context.Camions.FindAsync(camion.ID);
+        if (Img != null && Img.Length > 0 )
+        {
+            var oldImgPath = existingCamion.Img;
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
+
+            var imgFileName = $"{Guid.NewGuid()}_{Img.FileName}";
+            var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+            
+            if (!string.Equals(oldImgPath, $"~/img/{imgFileName}", StringComparison.OrdinalIgnoreCase))
+            {
+                var imgFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", oldImgPath.TrimStart('~', '/'));
+
+                if (System.IO.File.Exists(imgFullPath))
+                {
+                    System.IO.File.Delete(imgFullPath);
+                }
+                
+                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+                {
+                    await Img.CopyToAsync(fileStream);
+                }
+
+                camion.Img = $"~/img/{imgFileName}";
+            }
+        }else
+        {
+            View(camion);
+        }
+
+        existingCamion.Immatriculation = camion.Immatriculation;
+        existingCamion.Marque = camion.Marque;
+        existingCamion.Modele = camion.Modele;
+        existingCamion.Tonnage = camion.Tonnage;
+        existingCamion.Type = camion.Type;
+        _context.Update(existingCamion);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("GestionEffectif");
+    }
+
+    [HttpPost][Authorize(Roles = "Admin")]
+    public async Task<IActionResult> SupprimerCamion([FromForm] int id)
+    {
+        var camion = await _context.Camions.FindAsync(id);
+
+        if (camion == null)
+        {
+            return RedirectToAction("GestionEffectif");
+        }
+        
+        var imgFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", camion.Img.TrimStart('~', '/'));
+
+        if (System.IO.File.Exists(imgFullPath))
+        {
+            System.IO.File.Delete(imgFullPath);
+        }
+    
+        _context.Camions.Remove(camion);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("GestionEffectif");
     }
 }

@@ -19,4 +19,6 @@ public class Client : Personne
     public string Pays { get; set; }
     
     public bool isMauvaisPayeur { get; set; }
+    
+    public string logo { get; set; }
 }

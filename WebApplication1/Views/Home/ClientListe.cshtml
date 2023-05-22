@@ -3,34 +3,29 @@
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Gestion des Clients";
-    @model List<Client>
+@model List<Client>
 }
+
+
 <div class="container">
     <h1 class="display-4 me-4">Gestion des Clients: </h1>
     <div class="mb-5">
         <ul class="list-group">
-            @RenderSection("ClientList");
+           @foreach (var client in Model)
+           {
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+
+               @client.NomEntreprise
+
+           <form method="post" asp-controller="Home" asp-action="UpdateClientStatus">
+               <input type="hidden" name="id" value="@client.Id" />
+               <input type="checkbox" name="isMauvaisPayeur" value="true" @(client.isMauvaisPayeur ? "checked" : "") onchange="this.form.submit()" />
+               <label for="mauvaisPayeur-@client.Id">Mauvais Payeur</label>
+           </form>
+           </li>
+           }
         </ul>
     </div>
 </div>
 
-@section ClientList{
-    @foreach (var client in Model)
-    {
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            @client.NomEntreprise
-            <div class="form-check form-switch ">
-                @if (client.isMauvaisPayeur)
-                {
-                    <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer" checked>
-                    <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
-                }
-                else
-                {
-                    <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer">
-                    <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>
-                }
-            </div>
-        </li>
-    }
-}
+

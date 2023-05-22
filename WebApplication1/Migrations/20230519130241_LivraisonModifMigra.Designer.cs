@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models;
 
@@ -10,9 +11,11 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(InstallationDbContext))]
-    partial class InstallationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230519130241_LivraisonModifMigra")]
+    partial class LivraisonModifMigra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,7 +267,7 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("CamionLivraisonID")
+                    b.Property<int>("CamionLivraisonID")
                         .HasColumnType("int");
 
                     b.Property<string>("ChauffeurLivraisonId")
@@ -504,7 +507,9 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Models.Camion", "CamionLivraison")
                         .WithMany()
-                        .HasForeignKey("CamionLivraisonID");
+                        .HasForeignKey("CamionLivraisonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplication1.Models.Chauffeur", "ChauffeurLivraison")
                         .WithMany()

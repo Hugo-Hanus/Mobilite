@@ -1,0 +1,15 @@
+﻿@model List<Client>
+
+@foreach(Client client in Model)
+{
+    string nomEntreprise = client.NomEntreprise;
+    string pathToClientFolder = "img/logo/" + nomEntreprise;
+    if (Directory.Exists(pathToClientFolder))
+    {
+        string pathToClientLogo = pathToClientFolder+client.Id;
+        if (File.Exists(pathToClientLogo))
+        {
+            <img class="m-2" src="@pathToClientLogo" width="100" height="100" alt="logoCodLab"/>
+        }
+    }
+}

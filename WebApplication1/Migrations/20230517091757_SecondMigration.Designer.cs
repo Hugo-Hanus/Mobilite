@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models;
 
@@ -10,9 +11,11 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(InstallationDbContext))]
-    partial class InstallationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230517091757_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,15 +267,6 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("CamionLivraisonID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ChauffeurLivraisonId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ClientLivraisonId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Commentaire")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -281,21 +275,11 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("DateChargement")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("HeureChargement")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("DateDechargement")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("HeureChargement")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("HeureDechargementPrevu")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("HeureDechargementPrevu")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("LieuChargement")
                         .IsRequired()
@@ -312,12 +296,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CamionLivraisonID");
-
-                    b.HasIndex("ChauffeurLivraisonId");
-
-                    b.HasIndex("ClientLivraisonId");
 
                     b.ToTable("Livraison");
                 });
@@ -354,11 +332,6 @@ namespace WebApplication1.Migrations
 
                     b.Property<bool>("PermisCE")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("PhotoProfil")
-                        .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
@@ -402,10 +375,6 @@ namespace WebApplication1.Migrations
                     b.Property<bool>("isMauvaisPayeur")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("logo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.HasDiscriminator().HasValue("Client");
                 });
 
@@ -432,11 +401,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nom")
-                        .IsRequired()
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhotoProfil")
                         .IsRequired()
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("longtext");
@@ -498,27 +462,6 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Livraison", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Camion", "CamionLivraison")
-                        .WithMany()
-                        .HasForeignKey("CamionLivraisonID");
-
-                    b.HasOne("WebApplication1.Models.Chauffeur", "ChauffeurLivraison")
-                        .WithMany()
-                        .HasForeignKey("ChauffeurLivraisonId");
-
-                    b.HasOne("WebApplication1.Models.Client", "ClientLivraison")
-                        .WithMany()
-                        .HasForeignKey("ClientLivraisonId");
-
-                    b.Navigation("CamionLivraison");
-
-                    b.Navigation("ChauffeurLivraison");
-
-                    b.Navigation("ClientLivraison");
                 });
 #pragma warning restore 612, 618
         }
