@@ -20,7 +20,7 @@ ViewData["Title"] = "Gestion des Clients";
         <li class="list-group-item d-flex justify-content-between align-items-center">
             @client.NomEntreprise
             <div class="form-check form-switch ">
-                @if (client.ID == 1)/*client.bad == true*/
+                @if (client.isMauvaisPayeur)
                 {
                     <input class="form-check-input .redSwitch" type="checkbox" role="switch" id="mauvaisPayer" checked>
                     <label class="form-check-label" for="mauvaisPayeur">Mauvais Payeur</label>

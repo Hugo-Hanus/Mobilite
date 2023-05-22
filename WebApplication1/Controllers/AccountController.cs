@@ -29,10 +29,10 @@ public class AccountController : Controller
     {
         using (_context)
         {
-            var userInfo = _context.Clients.Single(client => client.ID == 1);
+            /*var userInfo = _context.Clients.Single(client => client.ID == 1);
             var camion = _context.Camions
                 .Where(b => b.ID == 1)
-                .Select(b => new { b.ID, b.Marque, b.Modèle }).FirstOrDefault();
+                .Select(b => new { b.ID, b.Marque, b.Modèle }).FirstOrDefault();*/
         }
         return RedirectToAction("Index", "Home");
     }

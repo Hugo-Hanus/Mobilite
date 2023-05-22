@@ -1,41 +1,106 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = "Admin")]
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery csrf
+@functions{
+
+    public string GetAntiCsrfToken()
+    {
+        return csrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<input type="hidden" id="RequestCsrfToken" name ="RequestCsrfToken" value="@GetAntiCsrfToken()"/>
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Statistiques";
-  @model List<Livraison>
+@model List<Livraison>
 }
 <div class="container">
   <h1 class="display-4 me-4">Statistiques :</h1>
   <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Hubert,Gare,23/02,..." aria-label="Hubert,Gare,23/02,..." aria-describedby="recherche">
+    <input type="text" class="form-control" id="SearchString" name="SearchString" placeholder="Hubert,Gare" aria-label="Hubert,Gare" aria-describedby="recherche">
     <button class="btn btn-secondary" type="button" id="recherche">Recherche</button>
   </div>
   <div class="mb-5">
     <table class="table table-striped">
       <thead>
       <tr>
-        <th id="clientSort" class="btn-outline-dark" scope="col">Client</th>
-        <th id="dateSort" class="btn-outline-dark" scope="col">Date</th>
-        <th id="chauffeurSort" class="btn-outline-dark" scope="col">Chauffeur</th>
+        <th id="client" class="btn-outline-dark" scope="col">Client</th>
+        <th id="date" class="btn-outline-dark" scope="col">Date</th>
+        <th id="chauffeur" class="btn-outline-dark" scope="col">Chauffeur</th>
       </tr>
       </thead>
-      <tbody>
-      @RenderSection("ListLivraison")
+      <tbody id="listToComplete">
       </tbody>
     </table>
   </div>
 </div>
 
-
-@section ListLivraison{
+@section ScriptStats{
+  <script src="~/lib/jquery-ui-1.13.2/jquery-ui.js"></script>
+  <script>
   
-  @foreach (var livraison in Model)
-  {
-    <tr>
-      <th scope="row">@livraison.ID</th>
-      <td>@livraison.HeureDechargementPrevu</td>
-      <td>@livraison.Contenu</td>@{/*nom du livreur*/}
-    </tr>
+  class LivraisonModel{
+    constructor({client,date,chauffeur}={}) {
+      this.client=client;
+      this.date=date;
+      this.chauffeur=chauffeur;
+    }
+    static compare({prop='name',isAsc=true}){
+                 return (a,b)=> (isAsc ?b[prop].localeCompare(a[prop]):a[prop].localeCompare(b[prop]));
+         }
   }
+  //Attention si element null casse tout 
+  let arrayLivraison = [
+   @foreach (var livraison in Model)
+   {@: new LivraisonModel({ client: "@livraison.ClientLivraison.UserName", date: "@livraison.DateDechargement", chauffeur: "@livraison.ChauffeurLivraison.UserName" }),
+   }
+    ];
+  let sortArray=arrayLivraison;
+  let tbodyBalise=document.getElementById("listToComplete");
+  let lastSort ={prop:'client',isAsc:true};
+  makeList(sortArray);
+  let token = $('#RequestCsrfToken').val();
+  $("#SearchString").autocomplete({
+    source: function(request, response) {
+      $.ajax({
+        url: '/Home/SearchList/',
+        type: 'GET',
+        data: { searchList: request.term },
+        headers: { 'RequestVerificationToken': token },
+        dataType: 'json',
+        success: function(data) {
+          response(data);
+        }
+      });
+    }
+  });
+  
+  document.querySelectorAll('th').forEach(col=>col.addEventListener("click",function (event){
+   let sortCol={prop:col.id,isAsc:lastSort.isAsc};
+   if(lastSort.prop===sortCol.prop){
+           lastSort.isAsc = !lastSort.isAsc
+       }else{
+           lastSort={prop:sortCol.prop,isAsc:true};
+    }
+   sortArray=sortArray.sort(LivraisonModel.compare(lastSort));
+   console.log(sortArray);
+   makeList(sortArray);
+  }
+  ));
+  
+  function makeList(array){
+    tbodyBalise.innerHTML='';
+    array.forEach(livraison=>{
+      let element = document.createElement("tr");
+      let props = Object.keys(livraison);
+      for (let row of props) {
+        let rowBalise= document.createElement("td");
+        rowBalise.textContent=livraison[row];
+        element.appendChild(rowBalise);
+      }
+      tbodyBalise.appendChild(element);
+      
+    })
+  }
+</script>
 }

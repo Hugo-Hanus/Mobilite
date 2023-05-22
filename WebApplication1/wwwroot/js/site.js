@@ -30,26 +30,6 @@ if(selectRole!=null) {
         }
     });
 }
-    /// CHAUFFEUR CAMION
-
-let selectChauffeur = document.getElementById("chauffeurSelect");
-let divFormCamion=document.getElementById("camionShow");
-if(selectChauffeur!=null) {
-    selectChauffeur.addEventListener("change", event => {
-        let divCamion = document.createElement("div");
-        divCamion.innerHTML = `
-    <div class="mb-2" id="formChauffeur">
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Choissisez un Camion</option>
-              <option value="1">UJCHF</option>
-              <option value="2">AZRFDVD</option>
-              <option value="3">EFGGDG</option>
-            </select>
-        </div>
-         <button type="submit" class="btn btn-primary">Confirmer</button>`;
-        divFormCamion.appendChild(divCamion);
-    });
-}
 
 
 /// SORT ELEMENT STATISTIQUE

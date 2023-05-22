@@ -107,8 +107,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEluc2NyaXB0aW9uQ2xpZW50Rm9ybS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/_AllLogoClient.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BbGxMb2dvQ2xpZW50LmNzaHRtbA==
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllChauffeurDispo.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsQ2hhdWZmZXVyRGlzcG8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLivraisonToAttribute.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsTGl2cmFpc29uVG9BdHRyaWJ1dGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLogoClient.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsTG9nb0NsaWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/_ValidationScriptsPartial.cshtml]
