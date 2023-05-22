@@ -15,4 +15,16 @@ public class InstallationDbContext : IdentityDbContext
   public DbSet<Dispatcher> Dispatchers { get; set; }
   public DbSet<Chauffeur> Chauffeurs { get; set; }
   public DbSet<Livraison> Livraison { get; set; }
+
+  protected override void OnModelCreating(ModelBuilder builder)
+  {
+      base.OnModelCreating(builder);
+      
+      
+      /* builder.Entity<Livraison>()
+         .HasOne(e => e.ClientLivraison).WithOne().HasForeignKey<Client>("ClientId");
+       builder.Entity<Livraison>()
+         .HasOne(e => e.ChauffeurLivraison).WithOne().HasForeignKey<Chauffeur>("ChauffeurId");
+   */
+  }
 }

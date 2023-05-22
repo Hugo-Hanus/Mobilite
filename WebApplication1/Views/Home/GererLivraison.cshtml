@@ -1,33 +1,73 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @attribute [Authorize(Roles = "Dispatcher")]
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery csrf
+@functions{
+
+    public string GetAntiCsrfToken()
+    {
+        return csrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+<input type="hidden" id="RequestCsrfToken" name ="RequestCsrfToken" value="@GetAntiCsrfToken()"/>
+
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Gérer la livraison ";
-    @model List<Chauffeur>
+    @model WebApplication1.ViewModel.LivraisonNameChauffeurListModel
 }
 <div class="container">
-    <h1 class="display-4 me-4">Gérer la Livraison XX:</h1>
+    <h1 class="display-4 me-4">Gérer la Livraison @Model.Livraison:</h1>
     <h2>Chauffeur</h2>
     <form>
-    <div class="mb-2" id="formChauffeur">
-        <select class="form-select" id="chauffeurSelect" aria-label="Default select example">
-            <option selected>Choissisez un Chauffeur</option>
-            @RenderSection("ListChauffeurDispo")
-        </select>
-    </div>
+        <div class="mb-2" id="formChauffeur">
+            <select class="form-select"  id="chauffeurSelect" name="chauffeurSelect" aria-label="Default select example">
+                <option disabled selected hidden>Choissisez un Chauffeur</option>
+                @await Html.PartialAsync("ListElements/_AllChauffeurDispo", Model.ListChauffeur)
+            </select>
+        </div>
         <div id="formCamion">
             <h2>Camion</h2>
-            <div id="camionShow">
-
+            <div id="camionShow" >
+                
             </div>
         </div>
     </form>
 </div>
 
-@section ListChauffeurDispo{
-    @foreach (Chauffeur chauffeur in Model)
-    {
-        <option value="@chauffeur.Id">@chauffeur.Prenom @chauffeur.Nom</option>
-    }
+@section ScriptCamion{
+    <script>
+        $(document).ready(function () {
+            $('#chauffeurSelect').change(function () {
+                let selectedChauffeurId = $(this).val();
+                let token = $('#RequestCsrfToken').val();
+                 let button = document.createElement("button");
+                                                                  button.type="submit";
+                                                                  button.className="btn btn-primary";
+                                                                  button.textContent = "Confirmer";
+                $.ajax({
+                    url: '/Home/GetCamionDispo/',
+                    type: 'GET',
+                    data: { selectedChauffeurId: selectedChauffeurId,livraisonId:@Model.Livraison },
+                    headers: { 'RequestVerificationToken': token },
+                    dataType: 'json',
+                    success: function (response) {
+                        let selectCamion=document.createElement("select");
+                        selectCamion.className="form-select mb-2";
+                        selectCamion.id = "camionSelect";
+                        let divShow=document.getElementById("camionShow");
+                        divShow.innerHTML='';
+                       divShow.appendChild(selectCamion);
+                        response.forEach(camion=>{
+                            let optionNode = document.createElement("option");
+                            optionNode.text=camion.immatriculation;
+                            optionNode.id = camion.id;
+                            selectCamion.appendChild(optionNode);
+                             divShow.appendChild(button);
+                    });},error:function() {
+                    }
+                });
+            });
+        });
+    </script>
 }

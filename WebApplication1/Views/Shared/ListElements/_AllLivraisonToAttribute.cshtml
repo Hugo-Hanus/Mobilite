@@ -1,0 +1,23 @@
+﻿@model WebApplication1.ViewModel.TwoListLivraison
+<ul class="list-group mb-2">
+@foreach(Livraison livraison in Model.ableGererList)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Livraison @livraison.ID
+                <a class="btn btn-secondary" type="submit" asp-controller="Home" asp-action="GererLivraison" asp-route-id="@livraison.ID">Gérer</a>
+            </li>
+        }
+</ul>
+<div>
+    <h2 class="display-4 me-4">Livraisons à traitées (Mauvais payeur) :</h2>
+</div>
+<ul class="list-group mb-2">
+@foreach(Livraison livraison in Model.mauvaisPayeurList)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Livraison @livraison.ID
+                <button class="btn btn-secondary btn-warning"  disabled>Mauvais payeur</button>
+                        
+            </li>
+        }
+</ul>

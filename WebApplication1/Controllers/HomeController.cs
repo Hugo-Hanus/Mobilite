@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using WebApplication1.ViewModel;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace WebApplication1.Controllers;
 
@@ -187,15 +190,72 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Dispatcher")]
-
     public IActionResult Dispatch()
     {
-        return PartialView();
+        var listLivraisonDispo = _context.Livraison.Where(l => l.StatutLivraison == Models.Livraison.Statut.Attente & l.ChauffeurLivraison==null & l.ClientLivraison.isMauvaisPayeur==false);
+        var listLivraisonMauvaisPayeur = _context.Livraison.Where(l => l.StatutLivraison == Models.Livraison.Statut.Attente & l.ChauffeurLivraison==null & l.ClientLivraison.isMauvaisPayeur==true);
+
+        TwoListLivraison liv = new TwoListLivraison();
+         liv.ableGererList = listLivraisonDispo.ToList();
+        liv.mauvaisPayeurList = listLivraisonMauvaisPayeur.ToList();
+        return PartialView("Dispatch",liv);
     }
-    public IActionResult GererLivraison()
+    [Authorize(Roles = "Dispatcher")]
+    public IActionResult GererLivraison(int id)
     {
-        return PartialView();
+        var livraisonGerer = _context.Livraison.SingleOrDefault(l => l.ID == id);
+            var heureChargement = DateTime.Parse(livraisonGerer.HeureChargement);
+            var heureDechargementPrevu = DateTime.Parse(livraisonGerer.HeureDechargementPrevu);
+            var chauffeurLivraisonId = livraisonGerer?.ChauffeurLivraison?.Id;
+            var chauffeurs = _context.Users.OfType<Chauffeur>()
+                .Where(anu => anu.Id != chauffeurLivraisonId && !_context.Livraison.Any(l => l.ChauffeurLivraison.Id == anu.Id && l.DateChargement == livraisonGerer.DateChargement && l.DateDechargement == livraisonGerer.DateDechargement)).ToList();
+            var chauffeursNonIssusDeLivraison = chauffeurs.Where(anu => !_context.Livraison
+                    .Where(l => l.ChauffeurLivraison != null && l.ChauffeurLivraison.Id == anu.Id && l.DateChargement == livraisonGerer.DateChargement && l.DateDechargement == livraisonGerer.DateDechargement).AsEnumerable()
+                    .Any(l => DateTime.Parse(l.HeureChargement) >= heureChargement &&
+                              DateTime.Parse(l.HeureChargement) <= heureDechargementPrevu &&
+                              DateTime.Parse(l.HeureDechargementPrevu) >= heureDechargementPrevu &&
+                              DateTime.Parse(l.HeureDechargementPrevu) <= heureDechargementPrevu))
+                .ToList();
+            var  viewModel = new LivraisonNameChauffeurListModel
+            {
+                Livraison = livraisonGerer.ID,
+                ListChauffeur = chauffeursNonIssusDeLivraison.ToList()
+            };
+        
+        
+        
+
+        return PartialView("GererLivraison",viewModel);
     }
+    [Produces("application/json")]
+    [ValidateAntiForgeryToken]
+    public  IActionResult GetCamionDispo(string selectedChauffeurId,int livraisonId)
+    {
+        var chauffeur = _context.Users.OfType<Chauffeur>().SingleOrDefault(chauf => chauf.Id == selectedChauffeurId);
+        var livraisonChoisie = _context.Livraison.SingleOrDefault(liv => liv.ID == livraisonId);
+        var heureChargement = DateTime.Parse(livraisonChoisie.HeureChargement);
+        var heureDechargementPrevu = DateTime.Parse(livraisonChoisie.HeureDechargementPrevu);
+        
+     
+        var camions = _context.Camions
+            .Where(camion => !_context.Livraison.Any(l => l.CamionLivraison.ID == camion.ID && l.DateChargement == livraisonChoisie.DateChargement && l.DateDechargement == livraisonChoisie.DateDechargement))
+            .Where(camion =>
+                (chauffeur.PermisB && camion.Type == "B") ||
+                (chauffeur.PermisC && camion.Type == "C") ||
+                (chauffeur.PermisCE && camion.Type == "CE"))
+            .ToList();
+        var camionsDisponiblesAuHoraire = camions.Where(cam => !_context.Livraison
+                .Where(l => l.ChauffeurLivraison != null && l.CamionLivraison.ID == cam.ID && l.DateChargement == livraisonChoisie.DateChargement && l.DateDechargement == livraisonChoisie.DateDechargement).AsEnumerable()
+                .Any(l => DateTime.Parse(l.HeureChargement) >= heureChargement &&
+                          DateTime.Parse(l.HeureChargement) <= heureDechargementPrevu &&
+                          DateTime.Parse(l.HeureDechargementPrevu) >= heureDechargementPrevu &&
+                          DateTime.Parse(l.HeureDechargementPrevu) <= heureDechargementPrevu))
+            .ToList();
+
+
+        return Ok(camionsDisponiblesAuHoraire.ToList());
+    
+}
 
     [Authorize(Roles = "Client")]
 
@@ -208,6 +268,7 @@ public class HomeController : Controller
         }
         return View(livraison);
     }
+
     
     [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Client")]
     public IActionResult ModifierLivraison(Livraison model)
@@ -275,7 +336,7 @@ public class HomeController : Controller
         {
             listLivraison = _context.Livraison.Where(l=>l.StatutLivraison==Models.Livraison.Statut.Attente).ToList();
         }
-        return PartialView("Dispatch",listLivraison);
+        return PartialView("LivraisonDispatch",listLivraison);
     }
     
     [Authorize(Roles = "Chauffeur")]
@@ -353,9 +414,24 @@ public class HomeController : Controller
     [Authorize(Roles = "Admin")]
     public IActionResult Statistique()
     {
-        return PartialView();
+        //get all livraison effectuer et récuper le chauffeur/le client /date
+        var listLivraison = _context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide).ToList();
+       
+        return PartialView(listLivraison);
     }
-    
+    [Produces("application/json")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SearchList(string searchList)
+    {
+        var listChauffeur = await _context.Livraison.Include(l=>l.ChauffeurLivraison).Where(liv =>
+            liv.ChauffeurLivraison.UserName.Contains(searchList)).Select(liv => liv.ChauffeurLivraison).Distinct().ToListAsync();
+        var listClient = await _context.Livraison.Include(l=>l.ClientLivraison).Where(liv =>
+            liv.ClientLivraison.UserName.Contains(searchList) & liv.StatutLivraison==Models.Livraison.Statut.Attente).Select(liv => liv.ClientLivraison).Distinct().ToListAsync();
+        var listString = new List<string>();
+        listChauffeur.ForEach(e => listString.Add(e.UserName));
+        listClient.ForEach(e=>listString.Add(e.UserName));
+        return Ok(listString);
+    }
     public IActionResult ErrorPage()
     {
         return PartialView();

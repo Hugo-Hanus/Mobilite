@@ -1,0 +1,5 @@
+﻿@model List<Chauffeur>
+@foreach (Chauffeur chauffeur in Model)
+{
+    <option value="@chauffeur.Id">@chauffeur.Prenom @chauffeur.Nom</option>
+}
