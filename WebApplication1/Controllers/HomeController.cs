@@ -235,12 +235,7 @@ public class HomeController : Controller
         var livraisonChoisie = _context.Livraison.SingleOrDefault(liv => liv.ID == livraisonId);
         var heureChargement = DateTime.Parse(livraisonChoisie.HeureChargement);
         var heureDechargementPrevu = DateTime.Parse(livraisonChoisie.HeureDechargementPrevu);
-
-        var camionsDisponibles = _context.Camions.Where(camion =>
-            (chauffeur.PermisB && camion.Type == "B") ||
-            (chauffeur.PermisC && camion.Type == "C") ||
-            (chauffeur.PermisCE && camion.Type == "CE")
-        ).ToList();
+        
      
         var camions = _context.Camions
             .Where(camion => !_context.Livraison.Any(l => l.CamionLivraison.ID == camion.ID && l.DateChargement == livraisonChoisie.DateChargement && l.DateDechargement == livraisonChoisie.DateDechargement))
@@ -262,6 +257,19 @@ public class HomeController : Controller
     
 }
 
+    [Authorize(Roles = "Client")]
+
+    public IActionResult ModifierLivraison(int id)
+    {
+        var livraison = _context.Livraison.FirstOrDefault(l => l.ID == id);
+        if (livraison == null)
+        {
+            return RedirectToAction("Index");
+        }
+        return View(livraison);
+    }
+
+    
     [HttpPost][ValidateAntiForgeryToken][Authorize(Roles = "Client")]
     public IActionResult ModifierLivraison(Livraison model)
     {
