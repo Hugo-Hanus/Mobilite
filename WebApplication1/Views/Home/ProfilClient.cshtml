@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Client")]
+@model Client
+@{
+    Layout = "_Layout";  
+    ViewData["Title"] = "Profil du client";
+}
+
+<div class="container">
+    <h1 class="display-4">Profil - Client:</h1>
+    <a class="btn btn-secondary" asp-controller="Home" asp-action="ModificationClient">Modifier</a>
+    <div class="form-group mb-3">
+            <label for="entrepriseName">Nom de L'entreprise</label>
+            <input asp-for="NomEntreprise" type="text" class="form-control" id="entrepriseName" readonly name="entrepriseName">
+        </div>
+        <div class="form-group mb-3">
+            <label for="email">Adresse Mail</label>
+            <input asp-for="Email" type="email" class="form-control" id="mail" readonly name="email">
+        </div>
+    <div class="form-group mb-3">
+            <label for="adress">Adresse </label>
+            <div class="d-flex mb-3">
+                <input asp-for="Rue"  type="text" class="form-control" id="road" readonly name="rue">
+                <input asp-for="Numero"  type="number" class="form-control" id="numberRoad" readonly name="numero">
+                <input asp-for="CodePostal" type="number" class="form-control" id="postalCode" readonly name="codePostal">
+            </div>
+            <div class="d-flex mb-3">
+                <input asp-for="Localite" type="text" class="form-control" id="localite" readonly name="localite">
+                <input asp-for="Pays" type="text" class="form-control" id="pays" readonly name="pays">
+            </div>
+        <div class="d-grid mb-3">
+            @{
+                if (!string.IsNullOrWhiteSpace(Model.logo))
+                {
+                    <label for="logo">Logo entreprise</label>
+                    <img src="@Url.Content(Model.logo)" alt="Logo entreprise" />
+                }
+                else
+                {
+                    <label for="logo">Aucun logo enregistré</label>
+
+                }
+            }
+            </div>
+        </div>
+</div>

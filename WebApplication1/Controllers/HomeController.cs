@@ -18,11 +18,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly InstallationDbContext _context;
+    private readonly IWebHostEnvironment _environment;
 
-    public HomeController(ILogger<HomeController> logger, InstallationDbContext context)
+
+    public HomeController(IWebHostEnvironment environment,ILogger<HomeController> logger, InstallationDbContext context)
     {
         _logger = logger;
         _context = context;
+        _environment = environment;
+
     }
 
     public IActionResult Index()
@@ -51,8 +55,6 @@ public class HomeController : Controller
         await userManager.AddToRoleAsync(client, "Client"); 
         await signInManager.SignInAsync(client, false); 
         
-        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","logo",client.Email);
-        Directory.CreateDirectory(uploadPath);
         return RedirectToAction("Index");
     } 
     public IActionResult InscriptionMembre()
@@ -517,16 +519,20 @@ public class HomeController : Controller
             
                 if (Logo != null && Logo.Length > 0)
                 {
-                    var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logo",userCasted.Email);
+                    var user = await userManager.GetUserAsync(User);
+                    var userEmail = user?.Email;
+            
+                    var fileExtension = Path.GetExtension(Logo.FileName);
 
-                    var imgFileName = $"{Guid.NewGuid()}_{Logo.FileName}";
-                    var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+                    string newFileName = $"{userEmail}{fileExtension}";
+                    var path = Path.Combine(_environment.WebRootPath, "img", newFileName);
 
-                    using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+
+                      using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await Logo.CopyToAsync(fileStream);
+                        await Logo.CopyToAsync(stream);
                     }
-                    userCasted.logo = $"~/img/{imgFileName}";
+                    userCasted.logo = $"~/img/{newFileName}";
 
                 }
                 await userManager.UpdateAsync(userCasted);
@@ -798,5 +804,14 @@ public class HomeController : Controller
         await _context.SaveChangesAsync();
 
         return RedirectToAction("GestionEffectif");
+    }
+
+    [Authorize(Roles = "Client")]
+    public async Task<IActionResult> ProfilClient([FromServices] UserManager<IdentityUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(User);
+        var client = await _context.Users.OfType<Client>().FirstOrDefaultAsync(c => c.Id == user.Id);
+
+        return View(client);
     }
 }
