@@ -104,8 +104,6 @@ public class HomeController : Controller
 
             if (password.Equals(passwordConfirm))
             {
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","profilPic",dispatcher.Email);
-                Directory.CreateDirectory(uploadPath);
                 await userManager.CreateAsync(dispatcher, password);
                 await userManager.AddToRoleAsync(dispatcher, "Dispatcher");
                 await signInManager.SignInAsync(dispatcher, false);
@@ -146,12 +144,9 @@ public class HomeController : Controller
             
             if (password.Equals(passwordConfirm))
             {
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","profilPic",chauffeur.Email);
-                Directory.CreateDirectory(uploadPath);
                 await userManager.CreateAsync(chauffeur, password);
                 await userManager.AddToRoleAsync(chauffeur, "Chauffeur");
                 await signInManager.SignInAsync(chauffeur, false);
-                
             }
         }
         return RedirectToAction("Index");
@@ -492,12 +487,7 @@ public class HomeController : Controller
             {
                 userCasted.Numero = int.Parse(form["numero"].FirstOrDefault());
 
-            } 
-            if (!form["email"].FirstOrDefault().IsNullOrEmpty())
-            {
-               /** userCasted.Email = form["email"].FirstOrDefault();
-                userCasted.NormalizedEmail = form["email"].FirstOrDefault().ToUpper(); **/
-            } 
+            }
             if (!form["entrepriseName"].FirstOrDefault().IsNullOrEmpty())
             {
                 userCasted.NomEntreprise = form["entrepriseName"].FirstOrDefault();
@@ -508,13 +498,6 @@ public class HomeController : Controller
             {
                 userCasted.Localite = form["localite"].FirstOrDefault();
 
-            }
-            if (!form["passwordUserConfirm"].FirstOrDefault().IsNullOrEmpty() && !form["passwordUser"].FirstOrDefault().IsNullOrEmpty())
-            {
-                if (form["passwordUserConfirm"].FirstOrDefault().Equals(form["passwordUser"].FirstOrDefault()))
-                {
-                    //userManager.ResetPasswordAsync(userCasted,)
-                }
             }
             
                 if (Logo != null && Logo.Length > 0)
@@ -538,7 +521,7 @@ public class HomeController : Controller
                 await userManager.UpdateAsync(userCasted);
                 await _context.SaveChangesAsync();
             }
-        return RedirectToAction("Index");
+        return RedirectToAction("ProfilClient");
 
     }
     
@@ -580,16 +563,20 @@ public class HomeController : Controller
             }
             if (profil != null && profil.Length > 0)
             {
-                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+                var user = await userManager.GetUserAsync(User);
+                var userEmail = user?.Email;
+            
+                var fileExtension = Path.GetExtension(profil.FileName);
 
-                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
-                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+                string newFileName = $"{userEmail}{fileExtension}";
+                var path = Path.Combine(_environment.WebRootPath, "img", newFileName);
 
-                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    await profil.CopyToAsync(fileStream);
+                    await profil.CopyToAsync(stream);
                 }
-                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+                userCasted.PhotoProfil = $"~/img/{newFileName}";
 
             }
             
@@ -597,7 +584,7 @@ public class HomeController : Controller
             await _context.SaveChangesAsync();
             
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("ProfilDispatcher");
     }
 
     [Authorize(Roles = "Chauffeur")]
@@ -638,16 +625,20 @@ public class HomeController : Controller
             }
             if (profil != null && profil.Length > 0)
             {
-                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+                var user = await userManager.GetUserAsync(User);
+                var userEmail = user?.Email;
+            
+                var fileExtension = Path.GetExtension(profil.FileName);
 
-                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
-                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+                string newFileName = $"{userEmail}{fileExtension}";
+                var path = Path.Combine(_environment.WebRootPath, "img", newFileName);
 
-                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    await profil.CopyToAsync(fileStream);
+                    await profil.CopyToAsync(stream);
                 }
-                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+                userCasted.PhotoProfil = $"~/img/{newFileName}";
 
             }
             
@@ -655,7 +646,7 @@ public class HomeController : Controller
             await _context.SaveChangesAsync();
             
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("ProfilChauffeur");
 
     }
     
@@ -813,5 +804,24 @@ public class HomeController : Controller
         var client = await _context.Users.OfType<Client>().FirstOrDefaultAsync(c => c.Id == user.Id);
 
         return View(client);
+    }
+    
+    [Authorize(Roles = "Chauffeur")]
+    public async Task<IActionResult> ProfilChauffeur([FromServices] UserManager<IdentityUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(User);
+        var client = await _context.Users.OfType<Chauffeur>().FirstOrDefaultAsync(c => c.Id == user.Id);
+
+        return View(client);
+    }
+    
+    [Authorize(Roles = "Dispatcher")]
+    public async Task<IActionResult> ProfilDispatcher([FromServices] UserManager<IdentityUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(User);
+        var dispatcher = await _context.Users.OfType<Dispatcher>().FirstOrDefaultAsync(c => c.Id == user.Id);
+
+        return View(dispatcher);
+        
     }
 }
