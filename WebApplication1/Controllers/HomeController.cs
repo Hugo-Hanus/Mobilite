@@ -755,4 +755,48 @@ public class HomeController : Controller
 
         return RedirectToAction("GestionEffectif");
     }
+
+    
+    [HttpPost][Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateChauffeurPermis([FromForm] IFormCollection form)
+    {
+        var id = form["ChauffeurId"].ToString();
+        var chauffeur = await _context.Users.OfType<Chauffeur>().FirstOrDefaultAsync(c => c.Id == id);
+        if (chauffeur == null)
+        {
+            return NotFound();
+        }
+
+        var permisB = form["PermisB"].ToString();
+        if (permisB.IsNullOrEmpty())
+        {
+            chauffeur.PermisB = false;
+        }
+        else
+        {
+            chauffeur.PermisB = true;
+        }
+        var permisC = form["PermisC"].ToString();
+        if (permisC.IsNullOrEmpty())
+        {
+            chauffeur.PermisC = false;
+        }
+        else
+        {
+            chauffeur.PermisC = true;
+        }
+        var permisCE = form["PermisCE"].ToString();
+        if (permisCE.IsNullOrEmpty())
+        {
+            chauffeur.PermisCE = false;
+        }
+        else
+        {
+            chauffeur.PermisCE = true;
+        }
+        
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("GestionEffectif");
+    }
 }
