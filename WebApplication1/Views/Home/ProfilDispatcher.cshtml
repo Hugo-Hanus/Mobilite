@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Dispatcher = WebApplication1.Models.Dispatcher
+@attribute [Authorize(Roles = "Chauffeur")]
+@model WebApplication1.Models.Dispatcher
+@{
+    Layout = "_Layout";  
+    ViewData["Title"] = "Profil d'un dispatcher";
+}
+
+<div class="container">
+    <h1 class="display-4">Profil - Dispatcher:</h1>
+    <a class="btn btn-secondary" asp-controller="Home" asp-action="ModificationDispatcher">Modifier</a>
+    <div class="form-group mb-3">
+        <label for="nom">Nom</label>
+        <input asp-for="Nom" type="text" class="form-control" id="nom" readonly name="nom">
+    </div>
+    <div class="form-group mb-3">
+            <label for="prenom">Prénom</label>
+        <input asp-for="Prenom" type="text" class="form-control" id="prenom" readonly name="prenom">
+        </div>
+    
+    <div class="form-group mb-3">
+        <label for="email">Adresse Mail</label>
+        <input asp-for="Email" type="email" class="form-control" id="mail" readonly name="email">
+    </div>
+    <div class="form-group mb-3">
+        <label for="matricule">Matricule</label>
+        <input asp-for="Matricule" type="text" class="form-control" id="matricule" readonly name="matricule">
+    </div>
+    <div class="form-group mb-3">
+        <label for="dateNaissance">Date de naissance</label>
+        <input asp-for="DateNaissance" type="text" class="form-control" id="dateNaissance" readonly name="dateNaissance">
+    </div>
+     <label class="form-check-label">Niveau d'étude max</label>
+        <div><input class="form-check-input" name="divName" type="radio" value="CESS" id="diplome" @(Model.NiveauEtudeMax == Dispatcher.NiveauEtude.CESS ? "checked" : "")><label class="form-check-label ms-3" for="diplome">CESS</label></div>
+        <div><input class="form-check-input" name="divName" type="radio" value="Bachelier" id="diplome" @(Model.NiveauEtudeMax == Dispatcher.NiveauEtude.Bachelier ? "checked" : "")><label class="form-check-label ms-3" for="diplome">Bachelier</label></div>
+        <div><input class="form-check-input" name="divName" type="radio" value="Licencier" id="diplome" @(Model.NiveauEtudeMax == Dispatcher.NiveauEtude.Licencier ? "checked" : "")><label class="form-check-label ms-3" for="diplome">Licencier</label></div>
+         
+            @{
+                if (!string.IsNullOrWhiteSpace(Model.PhotoProfil))
+                {
+                    <label for="logo">Photo de profil</label>
+                    <img src="@Url.Content(Model.PhotoProfil)" alt="Logo entreprise" width="=100" height="100"/>
+                }
+                else
+                {
+                    <label for="logo">Aucune photo enregistrée</label>
+
+                }
+            }
+    </div>

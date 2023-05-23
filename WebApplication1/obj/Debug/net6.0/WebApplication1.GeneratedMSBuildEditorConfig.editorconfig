@@ -71,8 +71,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25DYW1pb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ModificationChauffeur.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25DaGF1ZmZldXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ModificationClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25DbGllbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ModificationDispatcher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25EaXNwYXRjaGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ModifierLivraison.cshtml]
@@ -81,6 +89,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ProfilChauffeur.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9maWxDaGF1ZmZldXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ProfilClient.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9maWxDbGllbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/ProfilDispatcher.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9maWxEaXNwYXRjaGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Home/RaterLivraison.cshtml]
@@ -117,14 +137,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLogoClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsTG9nb0NsaWVudC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Shared/ModificationChauffeur.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXE1vZGlmaWNhdGlvbkNoYXVmZmV1ci5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Shared/ModificationDispatcher.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXE1vZGlmaWNhdGlvbkRpc3BhdGNoZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Timotei/Documents/WebAvancé/225/HELMo-bilite/WebApplication1/Views/Shared/_AllLogoClient.cshtml]

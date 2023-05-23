@@ -20,9 +20,6 @@
 
     <ItemGroup>
       <Folder Include="Migrations" />
-      <Folder Include="wwwroot\img\logo\test@gmail.com" />
-      <Folder Include="wwwroot\img\profilPic\Chauffeur2@gmail.com" />
-      <Folder Include="wwwroot\img\profilPic\Dispatcher@gmail.com" />
     </ItemGroup>
 
 </Project>
