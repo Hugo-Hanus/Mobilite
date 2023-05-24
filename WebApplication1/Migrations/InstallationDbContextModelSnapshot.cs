@@ -235,10 +235,8 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
-                    b.Property<string>("Marque")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("Marque")
+                        .HasColumnType("int");
 
                     b.Property<string>("Modele")
                         .IsRequired()

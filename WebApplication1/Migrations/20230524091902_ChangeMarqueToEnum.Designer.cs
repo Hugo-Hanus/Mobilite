@@ -11,8 +11,8 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(InstallationDbContext))]
-    [Migration("20230519130241_LivraisonModifMigra")]
-    partial class LivraisonModifMigra
+    [Migration("20230524091902_ChangeMarqueToEnum")]
+    partial class ChangeMarqueToEnum
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -238,10 +238,8 @@ namespace WebApplication1.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
-                    b.Property<string>("Marque")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("Marque")
+                        .HasColumnType("int");
 
                     b.Property<string>("Modele")
                         .IsRequired()
@@ -267,7 +265,7 @@ namespace WebApplication1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CamionLivraisonID")
+                    b.Property<int?>("CamionLivraisonID")
                         .HasColumnType("int");
 
                     b.Property<string>("ChauffeurLivraisonId")
@@ -507,9 +505,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Models.Camion", "CamionLivraison")
                         .WithMany()
-                        .HasForeignKey("CamionLivraisonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CamionLivraisonID");
 
                     b.HasOne("WebApplication1.Models.Chauffeur", "ChauffeurLivraison")
                         .WithMany()

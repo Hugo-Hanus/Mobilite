@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using WebApplication1.ViewModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace WebApplication1.Controllers;
 
@@ -393,10 +394,19 @@ public class HomeController : Controller
                 View(camion);
             }
             
-            _context.Camions.Add(camion);
-            await _context.SaveChangesAsync();
+            Regex regex = new Regex(@"^\d-[A-Za-z]{3}-\d{3}$");
+            if (regex.IsMatch(camion.Immatriculation))
+            {
+                _context.Camions.Add(camion);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return View(camion);
+            }
             
-        return RedirectToAction("GestionEffectif");
+            
+            return RedirectToAction("GestionEffectif");
     }
     
     [Authorize(Roles = "Admin")]
@@ -712,14 +722,19 @@ public class HomeController : Controller
                     await Img.CopyToAsync(fileStream);
                 }
 
-                camion.Img = $"~/img/{imgFileName}";
+                existingCamion.Img = $"~/img/{imgFileName}";
             }
-        }else
-        {
-            View(camion);
         }
 
-        existingCamion.Immatriculation = camion.Immatriculation;
+        Regex regex = new Regex(@"^\d-[A-Za-z]{3}-\d{3}$");
+        if (regex.IsMatch(camion.Immatriculation))
+        {
+            existingCamion.Immatriculation = camion.Immatriculation;
+        }
+        else
+        {
+            return View(camion);
+        }
         existingCamion.Marque = camion.Marque;
         existingCamion.Modele = camion.Modele;
         existingCamion.Tonnage = camion.Tonnage;
