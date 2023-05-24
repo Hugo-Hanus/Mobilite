@@ -35,6 +35,10 @@ public class Livraison
     [Required] public string HeureDechargementPrevu { get; set; }
     [Required] public Statut StatutLivraison { get; set; }
 
+    public string HeureDechargementEffective { get; set; }
+    public string DateDechargementEffective { get; set; }
+
+    
     public Motif MotifLivraison
     {
         get;
@@ -56,7 +60,7 @@ public class Livraison
     {
         Valide,
         Attente,
-        Rate
+        Rate, EnCours
     }
 
     public Chauffeur? ChauffeurLivraison { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
@@ -326,21 +327,51 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Chauffeur")]
-    public IActionResult LivraisonDispatch()
+    public async Task<IActionResult> LivraisonDispatch()
     {
-        List<Livraison> listLivraison= new List<Livraison>();
-
-        using (_context )
-        {
-            listLivraison = _context.Livraison.Where(l=>l.StatutLivraison==Models.Livraison.Statut.Attente).ToList();
-        }
-        return PartialView("LivraisonDispatch",listLivraison);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var livraisons = _context.Livraison
+            .Where(l => l.ChauffeurLivraison.UserName == User.Identity.Name && l.StatutLivraison == Models.Livraison.Statut.EnCours)
+            .AsEnumerable()
+            .Select(l => new
+            {
+                Livraison = l,
+                DateChargement = DateTime.ParseExact(l.DateChargement, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+            })
+            .OrderBy(l => l.DateChargement)
+            .Select(l => l.Livraison).ToList();
+        
+        return PartialView(livraisons);
     }
     
     [Authorize(Roles = "Chauffeur")]
-    public IActionResult ValiderLivraison()
+    public IActionResult ValiderLivraison(int id)
     {
-        return PartialView();
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+        return View(livraison);
+    }
+    [HttpPost]
+    [Authorize(Roles = "Chauffeur")]
+    public async Task<IActionResult> ValiderLivraison([FromForm] IFormCollection form, int id)
+    {
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+
+        livraison.Commentaire = form["commentaire"].ToString();
+        livraison.DateDechargementEffective = form["dateDeChargementEf"].ToString();
+        livraison.HeureDechargementEffective = form["heureDeChargementEf"].ToString();
+        livraison.StatutLivraison = Models.Livraison.Statut.Valide;
+        _context.Update(livraison);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("LivraisonDispatch");
     }
     
     [Authorize(Roles = "Chauffeur")]
