@@ -13,22 +13,26 @@
         <div class="form-group mb-3">
             <label for="Immatriculation">Plaque d'immatriculation</label>
             <input asp-for="Immatriculation" type="text" class="form-control" id="immat" placeholder="Immatriculation">
+            <span asp-validation-for="Immatriculation" class="text-danger"></span>
         </div>
+        <input asp-for="ID" type="hidden" />
         <div class="form-group mb-3">
             <label for="Modele">Modèle</label>
             <input asp-for="Modele"type="text" class="form-control" id="Modele" placeholder="Modele">
         </div>
-        <div class="form-group mb-3">
-            <label for="Marque">Marque</label>
-            <input asp-for="Marque" type="text" class="form-control" id="marque" placeholder="Marque">
-            </div>
+         <div class="form-group mb-3">
+                    <label asp-for="Marque">Marque</label>
+                    <select asp-for="Marque" asp-items="Html.GetEnumSelectList<Camion.MarqueCamion>()" class="form-control">
+                    </select>
+                    <span asp-validation-for="Marque" class="text-danger"></span>
+                </div>
         <div class="form-group mb-3">
             <label for="Tonnage">Tonnage Max</label>
             <input asp-for="Tonnage" type="text" class="form-control" id="Tonnage" placeholder="Tonnage">
         </div>
         <div class="d-grid mb-3" >
             <label for="Img">Image du Camion</label>
-            <input asp-for="Img" type="file" class="form-control-file" id="img">
+            <input asp-for="Img" type="file" class="form-control-file" id="img" data-val="false">
         </div>
         <div class="form-check mb-4">
             <label class="form-check-label"> Choissisez le permis nécessaire pour le camion</label>
