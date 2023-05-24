@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using WebApplication1.ViewModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HostingEnvironmentExtensions = Microsoft.AspNetCore.Hosting.HostingEnvironmentExtensions;
 
 namespace WebApplication1.Controllers;
 
@@ -182,7 +183,7 @@ public class HomeController : Controller
         var userCasted = await _context.Users.OfType<Client>().SingleOrDefaultAsync(u => u.Id == userId);
 
         var livraisonsEnAttente = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && l.StatutLivraison==Models.Livraison.Statut.Attente).ToListAsync();
-        var livraisonFini = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && (l.StatutLivraison == Models.Livraison.Statut.Valide || l.StatutLivraison == Models.Livraison.Statut.Rate)).ToListAsync();
+        var livraisonFini = await _context.Livraison.Where(l => l.ClientLivraison == userCasted && (l.StatutLivraison == Models.Livraison.Statut.Valide || l.StatutLivraison == Models.Livraison.Statut.Rate|| l.StatutLivraison == Models.Livraison.Statut.EnCours)).ToListAsync();
         var LivrasionVm = new LivraisonViewModel();
         LivrasionVm.LivraisonsFini = livraisonFini;
         LivrasionVm.LivraisonsEnAttente = livraisonsEnAttente;
@@ -200,6 +201,12 @@ public class HomeController : Controller
         liv.mauvaisPayeurList = listLivraisonMauvaisPayeur.ToList();
         return PartialView("Dispatch",liv);
     }
+
+    [Authorize(Roles = "Dispatcher")]  
+    public async Task<IActionResult> refreshWindow()
+    {
+        return RedirectToAction("Dispatch");
+    }
     [Authorize(Roles = "Dispatcher")]
     public IActionResult GererLivraison(int id)
     {
@@ -213,8 +220,8 @@ public class HomeController : Controller
                     .Where(l => l.ChauffeurLivraison != null && l.ChauffeurLivraison.Id == anu.Id && l.DateChargement == livraisonGerer.DateChargement && l.DateDechargement == livraisonGerer.DateDechargement).AsEnumerable()
                     .Any(l => DateTime.Parse(l.HeureChargement) >= heureChargement &&
                               DateTime.Parse(l.HeureChargement) <= heureDechargementPrevu &&
-                              DateTime.Parse(l.HeureDechargementPrevu) >= heureDechargementPrevu &&
-                              DateTime.Parse(l.HeureDechargementPrevu) <= heureDechargementPrevu))
+                              (DateTime.Parse(l.HeureDechargementPrevu).AddHours(1)) >= heureDechargementPrevu &&
+                              (DateTime.Parse(l.HeureDechargementPrevu).AddHours(1)) <= heureDechargementPrevu))
                 .ToList();
             var  viewModel = new LivraisonNameChauffeurListModel
             {
@@ -248,7 +255,7 @@ public class HomeController : Controller
                 .Where(l => l.ChauffeurLivraison != null && l.CamionLivraison.ID == cam.ID && l.DateChargement == livraisonChoisie.DateChargement && l.DateDechargement == livraisonChoisie.DateDechargement).AsEnumerable()
                 .Any(l => DateTime.Parse(l.HeureChargement) >= heureChargement &&
                           DateTime.Parse(l.HeureChargement) <= heureDechargementPrevu &&
-                          DateTime.Parse(l.HeureDechargementPrevu) >= heureDechargementPrevu &&
+                          DateTime.Parse(l.HeureChargement) >= heureDechargementPrevu &&
                           DateTime.Parse(l.HeureDechargementPrevu) <= heureDechargementPrevu))
             .ToList();
 
@@ -257,8 +264,43 @@ public class HomeController : Controller
     
 }
 
-    [Authorize(Roles = "Client")]
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Dispatcher")]
+    public IActionResult AssignerChauffeurCamion( [FromForm] IFormCollection form)
+    {
+        var idChauffeur = form["chauffeurSelect"].ToString();
+        var plaqueCamion=form["camionSelect"].ToString();
+        var idLivraison=-1; 
+        try
+        {
+             idLivraison = int.Parse(form["livraisonId"].ToString());
+        }
+        catch (FormatException ex)
+        {
+            return RedirectToAction("Index");
+        }
+
+        var camionToAssigne = _context.Camions.SingleOrDefault(cam => cam.Immatriculation == plaqueCamion);
+        var chauffeurToAssigne = _context.Users.OfType<Chauffeur>().SingleOrDefault(cha=> cha.Id == idChauffeur);
+
+        var livraison = _context.Livraison.SingleOrDefault(liv => liv.ID == idLivraison);
+        if (livraison == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        livraison.CamionLivraison = camionToAssigne;
+        livraison.ChauffeurLivraison = chauffeurToAssigne;
+        livraison.StatutLivraison = Models.Livraison.Statut.EnCours;
+        _context.Update(livraison);
+        _context.SaveChanges();
+        return RedirectToAction("Dispatch");
+
+    }
+    
+    [Authorize(Roles = "Client")]
     public IActionResult ModifierLivraison(int id)
     {
         var livraison = _context.Livraison.FirstOrDefault(l => l.ID == id);
@@ -330,25 +372,30 @@ public class HomeController : Controller
     [Authorize(Roles = "Chauffeur")]
     public IActionResult LivraisonDispatch()
     {
+        var stringID=User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         List<Livraison> listLivraison= new List<Livraison>();
-
-        using (_context )
-        {
-            listLivraison = _context.Livraison.Where(l=>l.StatutLivraison==Models.Livraison.Statut.Attente).ToList();
-        }
-        return PartialView("LivraisonDispatch",listLivraison);
+        Dictionary<string, List<Livraison>> dictionnaryListLivraisonPerDate = new Dictionary<string, List<Livraison>>();
+        DateTime startAtMonday = DateTime.Parse("2023-05-24").AddDays(DayOfWeek.Monday -  DateTime.Parse("2023-05-24").DayOfWeek);
+        DateTime startAtSunday =  DateTime.Parse("2023-05-24").AddDays(7 - (int) DateTime.Parse("2023-05-24").DayOfWeek);
+        var lettt=startAtMonday.GetDateTimeFormats()[6].ToString()+" --> "+startAtSunday.GetDateTimeFormats()[6].ToString();
+        listLivraison = _context.Livraison.Include(liv=>liv.ChauffeurLivraison).Where(l=>l.StatutLivraison==Models.Livraison.Statut.EnCours|l.ChauffeurLivraison.Id==stringID).OrderBy(l=>l.DateChargement).ToList();
+        dictionnaryListLivraisonPerDate.Add(lettt,listLivraison);
+        
+        return PartialView("LivraisonDispatch",dictionnaryListLivraisonPerDate);
     }
     
     [Authorize(Roles = "Chauffeur")]
     public IActionResult ValiderLivraison()
     {
-        return PartialView();
+        Livraison liv = new Livraison();
+        return PartialView(liv);
     }
     
     [Authorize(Roles = "Chauffeur")]
     public IActionResult RaterLivraison()
     {
-        return PartialView();
+        Livraison liv = new Livraison();
+        return PartialView(liv);
     }
     
     [Authorize(Roles = "Admin")]
@@ -412,24 +459,36 @@ public class HomeController : Controller
     
     
     [Authorize(Roles = "Admin")]
-    public IActionResult Statistique()
+    public async Task<IActionResult> Statistique(string searchString="")
     {
-        //get all livraison effectuer et récuper le chauffeur/le client /date
-        var listLivraison = _context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide).ToList();
-       
-        return PartialView(listLivraison);
+        var listLivraison = _context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate).ToList();
+        if (searchString.IsNullOrEmpty())
+        {
+            return PartialView(listLivraison);
+        }
+        else
+        {
+            var listLivraisonSearh=_context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate)
+                .Where(l=>l.ChauffeurLivraison.Nom.Contains(searchString)|l.ChauffeurLivraison.Prenom.Contains(searchString)|l.ClientLivraison.NomEntreprise.Contains(searchString)).ToList();
+
+            return PartialView(listLivraisonSearh);
+        }
     }
     [Produces("application/json")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> SearchList(string searchList)
     {
         var listChauffeur = await _context.Livraison.Include(l=>l.ChauffeurLivraison).Where(liv =>
-            liv.ChauffeurLivraison.UserName.Contains(searchList)).Select(liv => liv.ChauffeurLivraison).Distinct().ToListAsync();
+            liv.ChauffeurLivraison.Prenom.Contains(searchList)|liv.ChauffeurLivraison.Nom.Contains(searchList)).Where(liv=>liv.StatutLivraison==Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate).Select(liv => liv.ChauffeurLivraison).Distinct().ToListAsync();
         var listClient = await _context.Livraison.Include(l=>l.ClientLivraison).Where(liv =>
-            liv.ClientLivraison.UserName.Contains(searchList) & liv.StatutLivraison==Models.Livraison.Statut.Attente).Select(liv => liv.ClientLivraison).Distinct().ToListAsync();
+            liv.ClientLivraison.UserName.Contains(searchList) & (liv.StatutLivraison==Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate)).Select(liv => liv.ClientLivraison).Distinct().ToListAsync();
         var listString = new List<string>();
-        listChauffeur.ForEach(e => listString.Add(e.UserName));
-        listClient.ForEach(e=>listString.Add(e.UserName));
+        listChauffeur.ForEach(e =>
+        {
+            listString.Add(e.Prenom);
+            listString.Add(e.Nom);
+        });
+        listClient.ForEach(e=>listString.Add(e.NomEntreprise));
         return Ok(listString);
     }
     public IActionResult ErrorPage()

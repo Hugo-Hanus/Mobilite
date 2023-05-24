@@ -4,37 +4,38 @@
 @{
     Layout = "_Layout";  
     ViewData["Title"] = "Livraison - Dispatch";
-    @model List<Livraison>
+    @model Dictionary<string,List<Livraison>>
 }
 <div class="container">
     <div>
         <h1 class="display-4 me-4">Livraison:</h1>
     </div>
-    @RenderSection("ListLivraisonPerDate")
+    @foreach (var keyValue in Model)
+       {
+           DateTime time = new DateTime();
+           <div class="mb-4">
+               <h2>@keyValue.Key</h2>
+               <ul class="list-group">
+                   @foreach (var livraisonADate in @keyValue.Value)/*toute les livraison à cette date*/
+                   {
+                       <li class="list-group-item d-flex justify-content-between align-items-center">
+                           <div>
+                               <p class="font-weight-bold">Livraison @livraisonADate.ID</p>
+                                   <p>Chargement: @livraisonADate.LieuChargement à @livraisonADate.HeureChargement</p>
+                               <p>Déchargment: @livraisonADate.LieuDechargement à @livraisonADate.HeureDechargementPrevu</p>
+                           </div>
+                           <div>
+                               <a class="btn btn-success" asp-controller="Home" asp-action="ValiderLivraison">Valider</a>
+                               <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison">Rater</a>
+                           </div>
+                       </li>
+                   }
+               </ul>
+           </div>
+       }
 
 </div>
 
-@section ListLivraisonPerDate{
-    @foreach (var date in "")
-    {
-        <div class="mb-4">
-            <h2>@date</h2>
-            <ul class="list-group">
-                @foreach (var livraisonADate in Model)/*toute les livraison à cette date*/
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="font-weight-bold">Livraison @livraisonADate.ID</p>
-                            <p>@livraisonADate.LieuChargement à @livraisonADate.HeureDechargementPrevu</p>
-                        </div>
-                        <div>
-                            <a class="btn btn-success" asp-controller="Home" asp-action="ValiderLivraison">Valider</a>
-                            <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison">Rater</a>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </div>
-    }
+
+   
     
-}

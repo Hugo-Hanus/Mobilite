@@ -56,7 +56,7 @@ public class Livraison
     {
         Valide,
         Attente,
-        Rate
+        Rate,EnCours
     }
 
     public Chauffeur? ChauffeurLivraison { get; set; }
