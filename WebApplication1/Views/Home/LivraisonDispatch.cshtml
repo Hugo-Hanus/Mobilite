@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.IdentityModel.Tokens
 @attribute [Authorize(Roles = "Chauffeur")]
 @model List<Livraison>
 @{
@@ -11,7 +12,10 @@
         <h1 class="display-4 me-4">Livraison:</h1>
     </div>
 </div>
-
+@if (Model.Count == 0)
+{
+    <p>Aucune livraison</p>
+}
 @foreach(var Livraison in Model){
 <div class="mb-4">
     <h2>@Livraison.DateChargement</h2> 
@@ -25,7 +29,7 @@
             </div>
             <div>
                 <a class="btn btn-success" asp-controller="Home" asp-action="ValiderLivraison" asp-route-id="@Livraison.ID">Valider</a>
-                <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison">Rater</a>
+                <a class="btn btn-danger" asp-controller="Home" asp-action="RaterLivraison" asp-route-id="@Livraison.ID">Rater</a>
             </div>
         </li>
                 

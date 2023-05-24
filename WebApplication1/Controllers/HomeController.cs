@@ -375,9 +375,32 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Chauffeur")]
-    public IActionResult RaterLivraison()
+    public IActionResult RaterLivraison(int id)
     {
-        return PartialView();
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+        return View(livraison);
+    }
+    
+    [Authorize(Roles = "Chauffeur")][HttpPost]
+    public async Task<IActionResult> RaterLivraison(int id, [FromForm] IFormCollection form)
+    {
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+
+        livraison.Commentaire = form["commentaire"].ToString();
+        livraison.MotifLivraison = Enum.Parse<Livraison.Motif>(form["motif"]);
+        livraison.StatutLivraison = Models.Livraison.Statut.Rate;
+        _context.Update(livraison);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("LivraisonDispatch");
     }
     
     [Authorize(Roles = "Admin")]
