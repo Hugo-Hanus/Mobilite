@@ -877,7 +877,20 @@ public class HomeController : Controller
         {
             System.IO.File.Delete(imgFullPath);
         }
-    
+        
+        var livraisons = await _context.Livraison.Where(l => l.CamionLivraison.ID == camion.ID && l.StatutLivraison ==Models.Livraison.Statut.EnCours).ToListAsync();
+        
+        foreach(var livraison in livraisons)
+        {
+            livraison.ChauffeurLivraison = null;
+            livraison.CamionLivraison = null;
+            livraison.StatutLivraison = Models.Livraison.Statut.Attente;
+            _context.Update(livraison);        
+            await _context.SaveChangesAsync();
+
+
+        }
+
         _context.Camions.Remove(camion);
         await _context.SaveChangesAsync();
 
@@ -886,7 +899,7 @@ public class HomeController : Controller
 
     
     [HttpPost][Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateChauffeurPermis([FromForm] IFormCollection form)
+    public async Task<IActionResult> UpdateChauffeurPermis([FromServices] UserManager<IdentityUser> userManager,[FromForm] IFormCollection form)
     {
         var id = form["ChauffeurId"].ToString();
         var chauffeur = await _context.Users.OfType<Chauffeur>().FirstOrDefaultAsync(c => c.Id == id);
@@ -922,7 +935,18 @@ public class HomeController : Controller
         {
             chauffeur.PermisCE = true;
         }
-        
+
+        if (!chauffeur.PermisB && !chauffeur.PermisC && !chauffeur.PermisCE)
+        {
+            var livraisons = await _context.Livraison.Where(l => l.ChauffeurLivraison.Id == chauffeur.Id && l.StatutLivraison == Models.Livraison.Statut.EnCours).ToListAsync();
+            foreach(var livraison in livraisons)
+            {
+                livraison.ChauffeurLivraison = null;
+                livraison.CamionLivraison = null;
+                livraison.StatutLivraison = Models.Livraison.Statut.Attente;
+            }
+
+        }
         await _context.SaveChangesAsync();
 
         return RedirectToAction("GestionEffectif");
