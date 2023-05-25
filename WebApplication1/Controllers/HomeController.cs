@@ -220,8 +220,8 @@ public class HomeController : Controller
                     .Where(l => l.ChauffeurLivraison != null && l.ChauffeurLivraison.Id == anu.Id && l.DateChargement == livraisonGerer.DateChargement && l.DateDechargement == livraisonGerer.DateDechargement).AsEnumerable()
                     .Any(l => DateTime.Parse(l.HeureChargement) >= heureChargement &&
                               DateTime.Parse(l.HeureChargement) <= heureDechargementPrevu &&
-                              (DateTime.Parse(l.HeureDechargementPrevu).AddHours(1)) >= heureDechargementPrevu &&
-                              (DateTime.Parse(l.HeureDechargementPrevu).AddHours(1)) <= heureDechargementPrevu))
+                              (DateTime.Parse(l.HeureDechargementPrevu)) >= heureDechargementPrevu.AddHours(1) &&
+                              (DateTime.Parse(l.HeureDechargementPrevu)) <= heureDechargementPrevu.AddHours(1)))
                 .ToList();
             var  viewModel = new LivraisonNameChauffeurListModel
             {
@@ -461,6 +461,14 @@ public class HomeController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Statistique(string searchString="")
     {
+        
+        // le nombre de livraison par marque de Camion
+        /*
+         * Select Count() .GroupBy(MarqueCamion)
+         *
+         */
+
+
         var listLivraison = _context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate).ToList();
         if (searchString.IsNullOrEmpty())
         {
