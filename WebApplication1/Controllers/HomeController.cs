@@ -890,7 +890,13 @@ public class HomeController : Controller
 
 
         }
-
+        var livraisons2 = await _context.Livraison.Where(l => l.CamionLivraison.ID == camion.ID && l.StatutLivraison ==Models.Livraison.Statut.Valide || l.StatutLivraison==Models.Livraison.Statut.Rate).ToListAsync();
+        foreach(var livraison in livraisons2)
+        {
+            livraison.CamionLivraison = null;
+            _context.Update(livraison);        
+            await _context.SaveChangesAsync();
+        }
         _context.Camions.Remove(camion);
         await _context.SaveChangesAsync();
 
