@@ -3,12 +3,13 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery csrf
 @functions{
 
-    public string GetAntiCsrfToken()
+    public string? GetAntiCsrfToken()
     {
         return csrf.GetAndStoreTokens(Context).RequestToken;
     }
 }
 <input type="hidden" id="RequestCsrfToken" name ="RequestCsrfToken" value="@GetAntiCsrfToken()"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Statistiques";
@@ -16,17 +17,25 @@ ViewData["Title"] = "Statistiques";
 }
 <div class="container">
   <h1 class="display-4 me-4">Statistiques :</h1>
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="SearchString" name="SearchString" placeholder="Hubert,Gare" aria-label="Hubert,Gare" aria-describedby="recherche">
-    <button class="btn btn-secondary" type="button" id="recherche">Recherche</button>
+  <div>
+  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+    
+  </div>
+  <div class="form mb-3">
+    <form method="get" class="d-flex" asp-action="Statistique">
+       <i class="bi-search h-100 mt-2 me-1"></i>
+      <input type="text" class="form-control form-input" id="SearchString" name="SearchString" placeholder="Hubert,Gare" aria-label="Hubert,Gare" aria-describedby="recherche">
+      <input type="submit" value="Recherche" class="btn btn-secondary w-25 form-input form-control"/>
+    </form>
   </div>
   <div class="mb-5">
     <table class="table table-striped">
       <thead>
       <tr>
-        <th id="client" class="btn-outline-dark" scope="col">Client</th>
-        <th id="date" class="btn-outline-dark" scope="col">Date</th>
-        <th id="chauffeur" class="btn-outline-dark" scope="col">Chauffeur</th>
+        <th id="client" class="btn-outline-dark colSort" scope="col">Client</th>
+        <th id="date" class="btn-outline-dark colSort" scope="col">Date</th>
+        <th id="chauffeur" class="btn-outline-dark colSort" scope="col">Chauffeur</th>
+        <th id="etat" class="btn-outline-dark colSort" scope="col">Etat</th>
       </tr>
       </thead>
       <tbody id="listToComplete">
@@ -40,19 +49,19 @@ ViewData["Title"] = "Statistiques";
   <script>
   
   class LivraisonModel{
-    constructor({client,date,chauffeur}={}) {
+    constructor({client,date,chauffeur,etat}={}) {
       this.client=client;
       this.date=date;
       this.chauffeur=chauffeur;
+      this.etat=etat;
     }
     static compare({prop='name',isAsc=true}){
                  return (a,b)=> (isAsc ?b[prop].localeCompare(a[prop]):a[prop].localeCompare(b[prop]));
          }
   }
-  //Attention si element null casse tout 
   let arrayLivraison = [
    @foreach (var livraison in Model)
-   {@: new LivraisonModel({ client: "@livraison.ClientLivraison.UserName", date: "@livraison.DateDechargement", chauffeur: "@livraison.ChauffeurLivraison.UserName" }),
+   {@: new LivraisonModel({ client: "@livraison.ClientLivraison.UserName", date: "@livraison.DateDechargement", chauffeur: "@livraison.ChauffeurLivraison.Prenom @livraison.ChauffeurLivraison.Nom",etat:"@livraison.StatutLivraison" }),
    }
     ];
   let sortArray=arrayLivraison;
@@ -103,4 +112,32 @@ ViewData["Title"] = "Statistiques";
     })
   }
 </script>
+  <script>
+  var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+  var yValues = [55, 49, 44, 24, 15];
+  var barColors = [
+    "#b91d47",
+    "#00aba9",
+    "#2b5797",
+    "#e8c3b9",
+    "#1e7145"
+  ];
+  
+  new Chart("myChart", {
+    type: "pie",
+    data: {
+      labels: xValues,
+      datasets: [{
+        backgroundColor: barColors,
+        data: yValues
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: "World Wide Wine Production 2018"
+      }
+    }
+  });
+  </script>
 }
