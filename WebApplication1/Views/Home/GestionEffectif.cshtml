@@ -6,8 +6,6 @@
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Gestion des effectifs";
-    List<Chauffeur> listChauffeur = new List<Chauffeur>();
-    List<Camion> listCamion = new List<Camion>();
 }
 <div class="container">
     <h1 class="display-4 me-4">Gestion des Effectifs:</h1>
@@ -15,21 +13,26 @@ ViewData["Title"] = "Gestion des effectifs";
     <div class="mb-5">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th scope="col">Prénom Nom</th>
-                <th scope="col">Permis B</th>
-                <th scope="col">Permis C</th>
-                <th scope="col">Permis CE</th>
-            </tr>
-            </thead>
+                        <tr>
+                            <th scope="col">Prénom Nom</th>
+                            <th scope="col">Permis B</th>
+                            <th scope="col">Permis C</th>
+                            <th scope="col">Permis CE</th>
+                        </tr>
+                        </thead>
             <tbody>
             @foreach (var chauffeur in Model.Chauffeurs)
             {
                 <tr>
-                    <td>@chauffeur.Nom @chauffeur.Prenom</td>
-                    <td><input type="checkbox" checked="@chauffeur.PermisB"  /></td>
-                    <td><input type="checkbox" checked="@chauffeur.PermisC"  /></td>
-                    <td><input type="checkbox" checked="@chauffeur.PermisCE"  /></td>
+                    <form asp-controller="Home" asp-action="UpdateChauffeurPermis" method="post">
+
+                        <td>@chauffeur.Nom @chauffeur.Prenom</td>
+                        <td><input type="checkbox" name="PermisB" checked="@chauffeur.PermisB"/></td>
+                        <td><input type="checkbox" name="PermisC" checked="@chauffeur.PermisC"/></td>
+                        <td><input type="checkbox" name="PermisCE" checked="@chauffeur.PermisCE"/></td>
+                        <td><input type="hidden" name="ChauffeurId" value="@chauffeur.Id"/></td>
+                        <td colspan="4"><button type="submit" class="btn btn-primary">Modifier</button></td>
+                    </form>
                 </tr>
             }
             </tbody>

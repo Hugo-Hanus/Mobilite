@@ -1,21 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj": {}
+    "C:\\Users\\Timotei\\Documents\\WebAvancé\\225\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj": {
+    "C:\\Users\\Timotei\\Documents\\WebAvancé\\225\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\Users\\Timotei\\Documents\\WebAvancé\\225\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj",
-        "packagesPath": "C:\\Users\\hanus\\.nuget\\packages\\",
-        "outputPath": "C:\\HELMO\\2022\\AI\\HELMo-bilite\\WebApplication1\\obj\\",
+        "projectPath": "C:\\Users\\Timotei\\Documents\\WebAvancé\\225\\HELMo-bilite\\WebApplication1\\WebApplication1.csproj",
+        "packagesPath": "C:\\Users\\Timotei\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Timotei\\Documents\\WebAvancé\\225\\HELMo-bilite\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet"
+        ],
         "configFilePaths": [
-          "C:\\Users\\hanus\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Timotei\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -86,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.408\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

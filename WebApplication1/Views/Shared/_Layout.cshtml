@@ -39,7 +39,7 @@
                                 <a class="nav-link" asp-controller="Home" asp-action="Dispatch">Dispatch</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="ModificationDispatcher">Profil</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="ProfilDispatcher">Profil</a>
                             </li>
                         }
                     }
@@ -53,7 +53,7 @@
                                 <a class="nav-link" asp-controller="Home" asp-action="LivraisonDispatch">Livraison Dispatch</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link"  asp-controller="Home" asp-action="ModificationChauffeur">Profil</a>
+                                <a class="nav-link"  asp-controller="Home" asp-action="ProfilChauffeur">Profil</a>
                             </li>
                         }
                     }
@@ -67,7 +67,7 @@
                                 <a class="nav-link" asp-controller="Home" asp-action="Livraison">Livraison Client</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="ModificationClient">Profil</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="ProfilClient">Profil</a>
                             </li>
                         }
                     }
@@ -134,6 +134,8 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 @RenderSection("Scripts",required:false)
 @RenderSection("ScriptCamion", required: false)
 @RenderSection("ScriptStats", required: false)

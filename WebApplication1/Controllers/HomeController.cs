@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using WebApplication1.ViewModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using HostingEnvironmentExtensions = Microsoft.AspNetCore.Hosting.HostingEnvironmentExtensions;
 
 namespace WebApplication1.Controllers;
@@ -19,11 +21,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly InstallationDbContext _context;
+    private readonly IWebHostEnvironment _environment;
 
-    public HomeController(ILogger<HomeController> logger, InstallationDbContext context)
+
+    public HomeController(IWebHostEnvironment environment,ILogger<HomeController> logger, InstallationDbContext context)
     {
         _logger = logger;
         _context = context;
+        _environment = environment;
+
     }
 
     public IActionResult Index()
@@ -52,8 +58,6 @@ public class HomeController : Controller
         await userManager.AddToRoleAsync(client, "Client"); 
         await signInManager.SignInAsync(client, false); 
         
-        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","logo",client.Email);
-        Directory.CreateDirectory(uploadPath);
         return RedirectToAction("Index");
     } 
     public IActionResult InscriptionMembre()
@@ -103,8 +107,6 @@ public class HomeController : Controller
 
             if (password.Equals(passwordConfirm))
             {
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","profilPic",dispatcher.Email);
-                Directory.CreateDirectory(uploadPath);
                 await userManager.CreateAsync(dispatcher, password);
                 await userManager.AddToRoleAsync(dispatcher, "Dispatcher");
                 await signInManager.SignInAsync(dispatcher, false);
@@ -145,12 +147,9 @@ public class HomeController : Controller
             
             if (password.Equals(passwordConfirm))
             {
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img","profilPic",chauffeur.Email);
-                Directory.CreateDirectory(uploadPath);
                 await userManager.CreateAsync(chauffeur, password);
                 await userManager.AddToRoleAsync(chauffeur, "Chauffeur");
                 await signInManager.SignInAsync(chauffeur, false);
-                
             }
         }
         return RedirectToAction("Index");
@@ -370,32 +369,80 @@ public class HomeController : Controller
     }
     
     [Authorize(Roles = "Chauffeur")]
-    public IActionResult LivraisonDispatch()
+    public async Task<IActionResult> LivraisonDispatch()
     {
-        var stringID=User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        List<Livraison> listLivraison= new List<Livraison>();
-        Dictionary<string, List<Livraison>> dictionnaryListLivraisonPerDate = new Dictionary<string, List<Livraison>>();
-        DateTime startAtMonday = DateTime.Parse("2023-05-24").AddDays(DayOfWeek.Monday -  DateTime.Parse("2023-05-24").DayOfWeek);
-        DateTime startAtSunday =  DateTime.Parse("2023-05-24").AddDays(7 - (int) DateTime.Parse("2023-05-24").DayOfWeek);
-        var lettt=startAtMonday.GetDateTimeFormats()[6].ToString()+" --> "+startAtSunday.GetDateTimeFormats()[6].ToString();
-        listLivraison = _context.Livraison.Include(liv=>liv.ChauffeurLivraison).Where(l=>l.StatutLivraison==Models.Livraison.Statut.EnCours|l.ChauffeurLivraison.Id==stringID).OrderBy(l=>l.DateChargement).ToList();
-        dictionnaryListLivraisonPerDate.Add(lettt,listLivraison);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var livraisons = _context.Livraison
+            .Where(l => l.ChauffeurLivraison.UserName == User.Identity.Name && l.StatutLivraison == Models.Livraison.Statut.EnCours)
+            .AsEnumerable()
+            .Select(l => new
+            {
+                Livraison = l,
+                DateChargement = DateTime.ParseExact(l.DateChargement, "yyyy-MM-dd", CultureInfo.InvariantCulture)
+            })
+            .OrderBy(l => l.DateChargement)
+            .Select(l => l.Livraison).ToList();
         
-        return PartialView("LivraisonDispatch",dictionnaryListLivraisonPerDate);
+        return PartialView(livraisons);
     }
     
     [Authorize(Roles = "Chauffeur")]
-    public IActionResult ValiderLivraison()
+    public IActionResult ValiderLivraison(int id)
     {
-        Livraison liv = new Livraison();
-        return PartialView(liv);
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+        return View(livraison);
+    }
+    [HttpPost]
+    [Authorize(Roles = "Chauffeur")]
+    public async Task<IActionResult> ValiderLivraison([FromForm] IFormCollection form, int id)
+    {
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+
+        livraison.Commentaire = form["commentaire"].ToString();
+        livraison.DateDechargementEffective = form["dateDeChargementEf"].ToString();
+        livraison.HeureDechargementEffective = form["heureDeChargementEf"].ToString();
+        livraison.StatutLivraison = Models.Livraison.Statut.Valide;
+        _context.Update(livraison);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("LivraisonDispatch");
     }
     
     [Authorize(Roles = "Chauffeur")]
-    public IActionResult RaterLivraison()
+    public IActionResult RaterLivraison(int id)
     {
-        Livraison liv = new Livraison();
-        return PartialView(liv);
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+        return View(livraison);
+    }
+    
+    [Authorize(Roles = "Chauffeur")][HttpPost]
+    public async Task<IActionResult> RaterLivraison(int id, [FromForm] IFormCollection form)
+    {
+        var livraison = _context.Livraison.Find(id);
+        if(livraison == null)
+        {
+            return NotFound();
+        }
+
+        livraison.Commentaire = form["commentaire"].ToString();
+        livraison.MotifLivraison = Enum.Parse<Livraison.Motif>(form["motif"]);
+        livraison.StatutLivraison = Models.Livraison.Statut.Rate;
+        _context.Update(livraison);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("LivraisonDispatch");
     }
     
     [Authorize(Roles = "Admin")]
@@ -443,10 +490,19 @@ public class HomeController : Controller
                 View(camion);
             }
             
-            _context.Camions.Add(camion);
-            await _context.SaveChangesAsync();
+            Regex regex = new Regex(@"^\d-[A-Za-z]{3}-\d{3}$");
+            if (regex.IsMatch(camion.Immatriculation))
+            {
+                _context.Camions.Add(camion);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                return View(camion);
+            }
             
-        return RedirectToAction("GestionEffectif");
+            
+            return RedirectToAction("GestionEffectif");
     }
     
     [Authorize(Roles = "Admin")]
@@ -557,12 +613,7 @@ public class HomeController : Controller
             {
                 userCasted.Numero = int.Parse(form["numero"].FirstOrDefault());
 
-            } 
-            if (!form["email"].FirstOrDefault().IsNullOrEmpty())
-            {
-               /** userCasted.Email = form["email"].FirstOrDefault();
-                userCasted.NormalizedEmail = form["email"].FirstOrDefault().ToUpper(); **/
-            } 
+            }
             if (!form["entrepriseName"].FirstOrDefault().IsNullOrEmpty())
             {
                 userCasted.NomEntreprise = form["entrepriseName"].FirstOrDefault();
@@ -574,32 +625,29 @@ public class HomeController : Controller
                 userCasted.Localite = form["localite"].FirstOrDefault();
 
             }
-            if (!form["passwordUserConfirm"].FirstOrDefault().IsNullOrEmpty() && !form["passwordUser"].FirstOrDefault().IsNullOrEmpty())
-            {
-                if (form["passwordUserConfirm"].FirstOrDefault().Equals(form["passwordUser"].FirstOrDefault()))
-                {
-                    //userManager.ResetPasswordAsync(userCasted,)
-                }
-            }
             
                 if (Logo != null && Logo.Length > 0)
                 {
-                    var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logo",userCasted.Email);
+                    var user = await userManager.GetUserAsync(User);
+                    var userEmail = user?.Email;
+            
+                    var fileExtension = Path.GetExtension(Logo.FileName);
 
-                    var imgFileName = $"{Guid.NewGuid()}_{Logo.FileName}";
-                    var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+                    string newFileName = $"{userEmail}{fileExtension}";
+                    var path = Path.Combine(_environment.WebRootPath, "img", newFileName);
 
-                    using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+
+                      using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        await Logo.CopyToAsync(fileStream);
+                        await Logo.CopyToAsync(stream);
                     }
-                    userCasted.logo = $"~/img/{imgFileName}";
+                    userCasted.logo = $"~/img/{newFileName}";
 
                 }
                 await userManager.UpdateAsync(userCasted);
                 await _context.SaveChangesAsync();
             }
-        return RedirectToAction("Index");
+        return RedirectToAction("ProfilClient");
 
     }
     
@@ -641,16 +689,20 @@ public class HomeController : Controller
             }
             if (profil != null && profil.Length > 0)
             {
-                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+                var user = await userManager.GetUserAsync(User);
+                var userEmail = user?.Email;
+            
+                var fileExtension = Path.GetExtension(profil.FileName);
 
-                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
-                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+                string newFileName = $"{userEmail}{fileExtension}";
+                var path = Path.Combine(_environment.WebRootPath, "img", newFileName);
 
-                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    await profil.CopyToAsync(fileStream);
+                    await profil.CopyToAsync(stream);
                 }
-                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+                userCasted.PhotoProfil = $"~/img/{newFileName}";
 
             }
             
@@ -658,7 +710,7 @@ public class HomeController : Controller
             await _context.SaveChangesAsync();
             
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("ProfilDispatcher");
     }
 
     [Authorize(Roles = "Chauffeur")]
@@ -699,16 +751,20 @@ public class HomeController : Controller
             }
             if (profil != null && profil.Length > 0)
             {
-                var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "profilPic",userCasted.Email);
+                var user = await userManager.GetUserAsync(User);
+                var userEmail = user?.Email;
+            
+                var fileExtension = Path.GetExtension(profil.FileName);
 
-                var imgFileName = $"{Guid.NewGuid()}_{profil.FileName}";
-                var imgFilePath = Path.Combine(uploadsPath, imgFileName);
+                string newFileName = $"{userEmail}{fileExtension}";
+                var path = Path.Combine(_environment.WebRootPath, "img", newFileName);
 
-                using (var fileStream = new FileStream(imgFilePath, FileMode.Create))
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    await profil.CopyToAsync(fileStream);
+                    await profil.CopyToAsync(stream);
                 }
-                userCasted.PhotoProfil = $"~/img/{imgFileName}";
+                userCasted.PhotoProfil = $"~/img/{newFileName}";
 
             }
             
@@ -716,7 +772,7 @@ public class HomeController : Controller
             await _context.SaveChangesAsync();
             
         }
-        return RedirectToAction("Index");
+        return RedirectToAction("ProfilChauffeur");
 
     }
     
@@ -782,14 +838,19 @@ public class HomeController : Controller
                     await Img.CopyToAsync(fileStream);
                 }
 
-                camion.Img = $"~/img/{imgFileName}";
+                existingCamion.Img = $"~/img/{imgFileName}";
             }
-        }else
-        {
-            View(camion);
         }
 
-        existingCamion.Immatriculation = camion.Immatriculation;
+        Regex regex = new Regex(@"^\d-[A-Za-z]{3}-\d{3}$");
+        if (regex.IsMatch(camion.Immatriculation))
+        {
+            existingCamion.Immatriculation = camion.Immatriculation;
+        }
+        else
+        {
+            return View(camion);
+        }
         existingCamion.Marque = camion.Marque;
         existingCamion.Modele = camion.Modele;
         existingCamion.Tonnage = camion.Tonnage;
@@ -821,5 +882,77 @@ public class HomeController : Controller
         await _context.SaveChangesAsync();
 
         return RedirectToAction("GestionEffectif");
+    }
+
+    
+    [HttpPost][Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateChauffeurPermis([FromForm] IFormCollection form)
+    {
+        var id = form["ChauffeurId"].ToString();
+        var chauffeur = await _context.Users.OfType<Chauffeur>().FirstOrDefaultAsync(c => c.Id == id);
+        if (chauffeur == null)
+        {
+            return NotFound();
+        }
+
+        var permisB = form["PermisB"].ToString();
+        if (permisB.IsNullOrEmpty())
+        {
+            chauffeur.PermisB = false;
+        }
+        else
+        {
+            chauffeur.PermisB = true;
+        }
+        var permisC = form["PermisC"].ToString();
+        if (permisC.IsNullOrEmpty())
+        {
+            chauffeur.PermisC = false;
+        }
+        else
+        {
+            chauffeur.PermisC = true;
+        }
+        var permisCE = form["PermisCE"].ToString();
+        if (permisCE.IsNullOrEmpty())
+        {
+            chauffeur.PermisCE = false;
+        }
+        else
+        {
+            chauffeur.PermisCE = true;
+        }
+        
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("GestionEffectif");
+    }
+
+    [Authorize(Roles = "Client")]
+    public async Task<IActionResult> ProfilClient([FromServices] UserManager<IdentityUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(User);
+        var client = await _context.Users.OfType<Client>().FirstOrDefaultAsync(c => c.Id == user.Id);
+
+        return View(client);
+    }
+    
+    [Authorize(Roles = "Chauffeur")]
+    public async Task<IActionResult> ProfilChauffeur([FromServices] UserManager<IdentityUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(User);
+        var client = await _context.Users.OfType<Chauffeur>().FirstOrDefaultAsync(c => c.Id == user.Id);
+
+        return View(client);
+    }
+    
+    [Authorize(Roles = "Dispatcher")]
+    public async Task<IActionResult> ProfilDispatcher([FromServices] UserManager<IdentityUser> userManager)
+    {
+        var user = await userManager.GetUserAsync(User);
+        var dispatcher = await _context.Users.OfType<Dispatcher>().FirstOrDefaultAsync(c => c.Id == user.Id);
+
+        return View(dispatcher);
+        
     }
 }

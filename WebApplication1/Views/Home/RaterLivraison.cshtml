@@ -8,13 +8,14 @@
 }
 <div class="container">
     <h1 class="display-4 me-4">Rater la Livraison @Model.ID:</h1>
-    <form>
-        <div class="form-check mb-4">
-          <label class="form-check-label"> Choissisez votre raison</label>
-            <div><input class="form-check-input" type="radio" name ="raisonRaterLivraison" value="Maladie" id="maladie"><label class="form-check-label ms-3" for="maladie">Maladie</label></div>
-            <div><input class="form-check-input" type="radio" name ="raisonRaterLivraison" value="Accident" id="accident"><label class="form-check-label ms-3" for="accident">Accident</label></div>
-            <div><input class="form-check-input" type="radio" name ="raisonRaterLivraison" value="Livraison impossible" id="impossible"><label class="form-check-label ms-3" for="impossible">Client absent / Livraison Impossible</label></div>  
-        </div>
+    <form enctype="multipart/form-data" asp-controller="Home" asp-action="RaterLivraison" asp-route-id="@Model.ID" >
+        <div class="form-group mb-3">
+                    <label for="motif">Motif </label>
+            <select  name="motif" asp-items="Html.GetEnumSelectList<Livraison.Motif>()" class="form-control"></select></div>
+        <div class="mb-3">
+                    <label for="commentaire" class="form-label">Commentaire</label>
+                    <textarea class="form-control" id="commentaire" name="commentaire" rows="3"></textarea>
+                </div>
         <button class="btn btn-warning" type="submit">Valider la non livraison</button>
     </form>
 </div>
