@@ -43,11 +43,9 @@
                 let selectedChauffeurId = $(this).val();
                 let token = $('#RequestCsrfToken').val();
                  let button = document.createElement("button");
-                                                                  button.type="submit";
-                                                                  button.className="btn btn-primary";
-                                                                  button.textContent = "Confirmer";
+                  button.type="submit";button.className="btn btn-primary";button.textContent = "Confirmer";
                 $.ajax({
-                    url: '/Home/GetCamionDispo/',
+                    url: "../GetCamionDispo/",
                     type: 'GET',
                     data: { selectedChauffeurId: selectedChauffeurId,livraisonId:@Model.Livraison },
                     headers: { 'RequestVerificationToken': token },
@@ -70,8 +68,7 @@
                             selectCamion.appendChild(optionNode);
                              divShow.appendChild(button);
                         
-                    });}},error:function() {
-                    }
+                    });}}
                 });
             });
         });

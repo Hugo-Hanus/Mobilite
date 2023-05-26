@@ -30,7 +30,7 @@
             </div>
         <div class="d-grid mb-3">
             @{
-                if (!string.IsNullOrWhiteSpace(Model.logo))
+                if (!(string.IsNullOrWhiteSpace(Model.logo)||Model.logo.Length<0))
                 {
                     <label for="logo">Logo entreprise</label>
                     <img src="@Url.Content(Model.logo)" alt="Logo entreprise" width="=100" height="100" />
