@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @attribute [Authorize(Roles = "Admin")]
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery csrf
 @functions{
@@ -9,17 +10,18 @@
     }
 }
 <input type="hidden" id="RequestCsrfToken" name ="RequestCsrfToken" value="@GetAntiCsrfToken()"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 @{
 Layout = "_Layout";  
 ViewData["Title"] = "Statistiques";
-@model List<Livraison>
+@model WebApplication1.ViewModel.StatsViewModel
 }
 <div class="container">
   <h1 class="display-4 me-4">Statistiques :</h1>
-  <div>
-  <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-    
+  <div class="mb-3 d-flex">
+    <canvas id="pieOne" class="h-25 w-25"></canvas>
+    <canvas id="pieTwo" class="h-25 w-25"></canvas>
+    <canvas id="pieThree" class="h-25 w-25"></canvas>
+    <canvas id="pieFour" class="h-25 w-25"></canvas>
   </div>
   <div class="form mb-3">
     <form method="get" class="d-flex" asp-action="Statistique">
@@ -60,7 +62,7 @@ ViewData["Title"] = "Statistiques";
          }
   }
   let arrayLivraison = [
-   @foreach (var livraison in Model)
+   @foreach (var livraison in Model.completeListLivraison)
    {@: new LivraisonModel({ client: "@livraison.ClientLivraison.UserName", date: "@livraison.DateDechargement", chauffeur: "@livraison.ChauffeurLivraison.Prenom @livraison.ChauffeurLivraison.Nom",etat:"@livraison.StatutLivraison" }),
    }
     ];
@@ -72,7 +74,7 @@ ViewData["Title"] = "Statistiques";
   $("#SearchString").autocomplete({
     source: function(request, response) {
       $.ajax({
-        url: '/Home/SearchList/',
+        url: "SearchList/",
         type: 'GET',
         data: { searchList: request.term },
         headers: { 'RequestVerificationToken': token },
@@ -92,7 +94,6 @@ ViewData["Title"] = "Statistiques";
            lastSort={prop:sortCol.prop,isAsc:true};
     }
    sortArray=sortArray.sort(LivraisonModel.compare(lastSort));
-   console.log(sortArray);
    makeList(sortArray);
   }
   ));
@@ -108,36 +109,20 @@ ViewData["Title"] = "Statistiques";
         element.appendChild(rowBalise);
       }
       tbodyBalise.appendChild(element);
-      
     })
   }
 </script>
   <script>
-  var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-  var yValues = [55, 49, 44, 24, 15];
-  var barColors = [
-    "#b91d47",
-    "#00aba9",
-    "#2b5797",
-    "#e8c3b9",
-    "#1e7145"
-  ];
-  
-  new Chart("myChart", {
-    type: "pie",
-    data: {
-      labels: xValues,
-      datasets: [{
-        backgroundColor: barColors,
-        data: yValues
-      }]
-    },
-    options: {
-      title: {
-        display: true,
-        text: "World Wide Wine Production 2018"
-      }
-    }
-  });
+    let pieOne = document.getElementById('pieOne');
+    let pieTwo = document.getElementById('pieTwo');
+    let pieThree = document.getElementById('pieThree');
+    let pieFour = document.getElementById('pieFour');
+      createChart(pieOne,@Html.Raw(Json.Serialize(Model.livraisonMarque.Keys.ToArray())),@Html.Raw(Json.Serialize(Model.livraisonMarque.Values.ToArray())),"Livraison Par Marque de Camion");
+      createChart(pieTwo,@Html.Raw(Json.Serialize(Model.rateChaffeur.Keys.ToArray())),@Html.Raw(Json.Serialize(Model.rateChaffeur.Values.ToArray())),"Livraison Raté par Chauffeur");
+      createChart(pieThree,@Html.Raw(Json.Serialize(Model.livraisonStatut.Keys.ToArray())),@Html.Raw(Json.Serialize(Model.livraisonStatut.Values.ToArray())),"Livraison par Statut");
+      createChart(pieFour,@Html.Raw(Json.Serialize(Model.livraisonParClient.Keys.ToArray())),@Html.Raw(Json.Serialize(Model.livraisonParClient.Values.ToArray())),"Livraison valide par Client");
+    function createChart(id,labels,datas,title){
+      new Chart(id, {type: 'pie',data: {labels: labels,datasets: [{data: datas}]},options: {plugins: {title: {display: true,text: title},legend: {position: 'bottom'}}}});}
+
   </script>
 }

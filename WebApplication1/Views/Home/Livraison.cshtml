@@ -30,7 +30,6 @@
           </td>
         </tr>
       }
-
       </tbody>
     </table>
   </div>
@@ -44,15 +43,13 @@
         <th scope="col">État</th>
       </tr>
       </thead>
-      <tbody>
-       @foreach (var livraison in Model.LivraisonsFini)
+      <tbody>@foreach (var livraison in Model.LivraisonsFini)
             {
               <tr>
                 <td>@livraison.Contenu</td>
                 <td>@livraison.StatutLivraison</td>
               </tr>
-            }
-      </tbody>
+            }</tbody>
     </table>
   </div>
 </div>

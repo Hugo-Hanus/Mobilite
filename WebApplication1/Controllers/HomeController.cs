@@ -32,11 +32,11 @@ public class HomeController : Controller
 
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         List<Client> listClients=new List<Client>();
-        listClients= _context.Clients.ToList();
-        return PartialView("Index",listClients);
+        listClients=  _context.Clients.ToList();
+        return  PartialView(listClients);
     }
 
     public IActionResult Privacy()
@@ -234,8 +234,8 @@ public class HomeController : Controller
         return PartialView("GererLivraison",viewModel);
     }
     [Produces("application/json")]
-    [ValidateAntiForgeryToken]
-    public  IActionResult GetCamionDispo(string selectedChauffeurId,int livraisonId)
+    [ValidateAntiForgeryToken][HttpGet]
+    public async Task<IActionResult> GetCamionDispo(string selectedChauffeurId,int livraisonId)
     {
         var chauffeur = _context.Users.OfType<Chauffeur>().SingleOrDefault(chauf => chauf.Id == selectedChauffeurId);
         var livraisonChoisie = _context.Livraison.SingleOrDefault(liv => liv.ID == livraisonId);
@@ -512,30 +512,50 @@ public class HomeController : Controller
         var clients = users.OfType<Client>().ToList();
         return PartialView(clients);
     }
-    
-    
+
+
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Statistique(string searchString="")
+    public async Task<IActionResult> Statistique(string searchString = "")
     {
+
+
+        var livraisonParMarque = _context.Livraison.Include(l => l.CamionLivraison)
+            .Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide |
+                          liv.StatutLivraison == Models.Livraison.Statut.Rate).GroupBy(l => l.CamionLivraison.Marque)
+            .Select(group => new { Marque = group.Key.ToString(), Number = group.Count() }).ToDictionary(w=>w.Marque,z=>z.Number);
+        var livraisonRateParChauffeur = _context.Livraison.Include(l => l.ChauffeurLivraison)
+            .Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Rate).GroupBy(l => l.ChauffeurLivraison)
+            .Select(group => new
+                {Chauffeur =group.Key.Prenom +" "+group.Key.Nom,NumberRate=group.Count()}).ToDictionary(x=>x.Chauffeur,y=>y.NumberRate);
+        var livraisonStatut = _context.Livraison.GroupBy(liv => liv.StatutLivraison)
+            .Select(group => new { Statut = group.Key.ToString(), Number = group.Count() })
+            .ToDictionary(f => f.Statut, g => g.Number);
+        var livraisonParClient = _context.Livraison.Include(l => l.ClientLivraison)
+            .Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide).GroupBy(livr => livr.ClientLivraison)
+            .Select(groupe => new { Entreprise = groupe.Key.NomEntreprise.ToString(), Number = groupe.Count() })
+            .ToDictionary(m => m.Entreprise, n => n.Number);
+
         
-        // le nombre de livraison par marque de Camion
-        /*
-         * Select Count() .GroupBy(MarqueCamion)
-         *
-         */
-
-
-        var listLivraison = _context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate).ToList();
+    var listLivraison = _context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate).ToList();
+        
+    var viewM = new StatsViewModel()
+    {
+        completeListLivraison = listLivraison,
+        rateChaffeur=livraisonRateParChauffeur,
+        livraisonMarque=livraisonParMarque,
+        livraisonStatut=livraisonStatut,
+        livraisonParClient=livraisonParClient
+    };
         if (searchString.IsNullOrEmpty())
         {
-            return PartialView(listLivraison);
+            return PartialView(viewM);
         }
         else
         {
             var listLivraisonSearh=_context.Livraison.Include(l=>l.ChauffeurLivraison).Include(l=>l.ClientLivraison).Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide|liv.StatutLivraison==Models.Livraison.Statut.Rate)
                 .Where(l=>l.ChauffeurLivraison.Nom.Contains(searchString)|l.ChauffeurLivraison.Prenom.Contains(searchString)|l.ClientLivraison.NomEntreprise.Contains(searchString)).ToList();
-
-            return PartialView(listLivraisonSearh);
+            viewM.completeListLivraison = listLivraisonSearh;
+            return PartialView(viewM);
         }
     }
     [Produces("application/json")]
@@ -569,13 +589,12 @@ public class HomeController : Controller
     
     public async Task<IActionResult> Deconnexion([FromServices]SignInManager<IdentityUser> signInManager)
     {
-        await signInManager.SignOutAsync();
-
+        
         foreach (var cookie in Request.Cookies.Keys)
         {
             Response.Cookies.Delete(cookie);
         }
-
+        await signInManager.SignOutAsync();
         return RedirectToAction("Index");
 
     }
