@@ -48,5 +48,5 @@ public class Camion
     public string Type { get; set; }
     [Required]
     public int Tonnage { get; set; }
-    public string Img { get; set; }
+    public string? Img { get; set; }
 }
