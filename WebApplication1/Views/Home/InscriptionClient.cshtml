@@ -20,7 +20,7 @@
 
 <div class="container">
     <h1 class="display-4">Inscription - Client:</h1>
-    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="InscriptionClient" onsubmit="return checkPassword();">
+    <form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="InscriptionClient" onsubmit="return checkPassword();">
         <div class="form-group mb-3">
             <label for="entrepriseName">Nom de L'entreprise</label>
             <input asp-for="NomEntreprise" type="text" class="form-control" id="entrepriseName" placeholder="Nom de l'entreprise" >

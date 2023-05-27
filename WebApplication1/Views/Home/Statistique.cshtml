@@ -24,7 +24,7 @@ ViewData["Title"] = "Statistiques";
     <canvas id="pieFour" class="h-25 w-25"></canvas>
   </div>
   <div class="form mb-3">
-    <form method="get" class="d-flex" asp-action="Statistique">
+    <form method="get" class="d-flex" asp-action="Statistique" asp-controller="Home">
        <i class="bi-search h-100 mt-2 me-1"></i>
       <input type="text" class="form-control form-input" id="SearchString" name="SearchString" placeholder="Hubert,Gare" aria-label="Hubert,Gare" aria-describedby="recherche">
       <input type="submit" value="Recherche" class="btn btn-secondary w-25 form-input form-control"/>
@@ -74,7 +74,7 @@ ViewData["Title"] = "Statistiques";
   $("#SearchString").autocomplete({
     source: function(request, response) {
       $.ajax({
-        url: "SearchList/",
+        url: "../Admin/SearchList",
         type: 'GET',
         data: { searchList: request.term },
         headers: { 'RequestVerificationToken': token },

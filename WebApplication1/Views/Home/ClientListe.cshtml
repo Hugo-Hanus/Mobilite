@@ -17,9 +17,9 @@ ViewData["Title"] = "Gestion des Clients";
 
                @client.NomEntreprise
 
-           <form method="post" asp-controller="Home" asp-action="UpdateClientStatus">
+           <form method="post" asp-controller="Admin" asp-action="UpdateClientStatus">
                <input type="hidden" name="id" value="@client.Id" />
-               <input type="checkbox" name="isMauvaisPayeur" value="true" @(client.isMauvaisPayeur ? "checked" : "") onchange="this.form.submit()" />
+               <input type="checkbox" class="red form-check-input" name="isMauvaisPayeur" value="true" @(client.isMauvaisPayeur ? "checked" : "") onchange="this.form.submit()" />
                <label for="mauvaisPayeur-@client.Id">Mauvais Payeur</label>
            </form>
            </li>

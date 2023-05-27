@@ -9,7 +9,7 @@ ViewData["Title"] = "Valider la Livraison";
 <div class="container">
     <h1 class="display-4 me-4">Valider la Livraison @Model.ID:</h1>
     <h2>Livraison @Model.ID</h2>
-    <form enctype="multipart/form-data" asp-controller="Home" asp-action="ValiderLivraison" asp-route-id="@Model.ID" >
+    <form enctype="multipart/form-data" asp-controller="Livraison" asp-action="ValiderLivraison" asp-route-id="@Model.ID" >
         <div class="mb-3">
             <label for="dateDeChargementEf" class="form-label">Date de Chargement effectuée</label>
             <input name="dateDeChargementEf" type="date" class="form-control" id="dateDeChargementEf" >

@@ -9,7 +9,7 @@
 <div class="container">
     <div class="d-flex align-items-center">
         <h2 class="display-4 me-4">Livraisons à traitées: </h2>
-        <a type ="submit" asp-action="refreshWindow" asp-controller="Home" class="btn btn-info">Rafraichir</a>
+        <a type ="submit" asp-action="refreshWindow" asp-controller="Livraison" class="btn btn-info">Rafraichir</a>
     </div>
     <div>
     @await Html.PartialAsync("ListElements/_AllLivraisonToAttribute", Model)

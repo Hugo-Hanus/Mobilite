@@ -19,8 +19,7 @@
         <th scope="col">Controle</th>
       </tr>
       </thead>
-      <tbody>
-      @foreach (var livraison in Model.LivraisonsEnAttente)
+      <tbody>@foreach (var livraison in Model.LivraisonsEnAttente)
       {
         <tr>
           <td>@livraison.Contenu</td>
@@ -29,11 +28,9 @@
             <a asp-controller="Home" asp-action="ModifierLivraison" asp-route-id="@livraison.ID" class="btn btn-primary">Modifier</a>
           </td>
         </tr>
-      }
-      </tbody>
+      }</tbody>
     </table>
   </div>
-  <hr class="hr hr-blurry mb-5" />
   <h2 class="display-4">Historique</h2>
   <div>
     <table class="table table-striped">
