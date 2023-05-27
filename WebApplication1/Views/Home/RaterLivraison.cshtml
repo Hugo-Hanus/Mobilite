@@ -8,7 +8,7 @@
 }
 <div class="container">
     <h1 class="display-4 me-4">Rater la Livraison @Model.ID:</h1>
-    <form enctype="multipart/form-data" asp-controller="Home" asp-action="RaterLivraison" asp-route-id="@Model.ID" >
+    <form enctype="multipart/form-data" asp-controller="Livraison" asp-action="RaterLivraison" asp-route-id="@Model.ID" >
         <div class="form-group mb-3">
                     <label for="motif">Motif </label>
             <select  name="motif" asp-items="Html.GetEnumSelectList<Livraison.Motif>()" class="form-control"></select></div>

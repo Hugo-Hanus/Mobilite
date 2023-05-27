@@ -9,7 +9,7 @@
 
 <div class="container">
     <h1 class="display-4">Ajouter un Camion:</h1>
-    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="AjouterCamion">
+    <form method="post" enctype="multipart/form-data" asp-controller="Admin" asp-action="AjouterCamion">
         <div class="form-group mb-3">
                     <label for="Immatriculation">Plaque d'immatriculation</label>
                     <input asp-for="Immatriculation" type="text" class="form-control" id="immat" placeholder="Immatriculation">
@@ -28,7 +28,7 @@
 
         <div class="form-group mb-3">
             <label for="Tonnage">Tonnage Max</label>
-            <input asp-for="Tonnage" type="text" class="form-control" id="Tonnage" placeholder="Tonnage">
+            <input asp-for="Tonnage" type="number" class="form-control" id="Tonnage" placeholder="Tonnage">
         </div>
         <div class="d-grid mb-3" >
             <label for="Img">Image du Camion</label>

@@ -24,7 +24,7 @@ ViewData["Title"] = "Gestion des effectifs";
             @foreach (var chauffeur in Model.Chauffeurs)
             {
                 <tr>
-                    <form asp-controller="Home" asp-action="UpdateChauffeurPermis" method="post">
+                    <form asp-controller="Admin" asp-action="UpdateChauffeurPermis" method="post">
 
                         <td>@chauffeur.Nom @chauffeur.Prenom</td>
                         <td><input type="checkbox" name="PermisB" checked="@chauffeur.PermisB"/></td>
@@ -52,11 +52,11 @@ ViewData["Title"] = "Gestion des effectifs";
                         <p class="mb-0">@camion.Marque @camion.Modele @camion.Tonnage</p>
                     </div>
                     <div>
-                        <form asp-controller="Home" asp-action="SupprimerCamion" method="post">
-                            <input type="hidden" name="id" value="@camion.ID" />
+                          <a class="btn btn-secondary" asp-controller="Home" asp-action="ModificationCamion" asp-route-id="@camion.ID">Modifier</a>
+                        <form asp-controller="Admin" asp-action="SupprimerCamion" method="post">
+                            <input type="hidden" name="id" value="@camion.ID"/>
                             <button type="submit" class="btn btn-danger">Supprimer</button>
                         </form>
-                        <a class="btn btn-secondary" asp-controller="Home" asp-action="ModificationCamion" asp-route-id="@camion.ID">Modifier</a>
                     </div>
                 </li>
             }

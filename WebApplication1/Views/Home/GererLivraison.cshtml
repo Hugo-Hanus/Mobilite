@@ -19,7 +19,7 @@
 <div class="container">
     <h1 class="display-4 me-4">Gérer la Livraison @Model.Livraison:</h1>
     <h2>Chauffeur</h2>
-    <form enctype="multipart/form-data" asp-controller="Home" asp-action="AssignerChauffeurCamion">
+    <form enctype="multipart/form-data" asp-controller="Livraison" asp-action="AssignerChauffeurCamion">
         <input name="livraisonId" id="livraisonId"  hidden value="@Model.Livraison"/>
         <div class="mb-2" id="formChauffeur">
             <select class="form-select" id="chauffeurSelect" name="chauffeurSelect" aria-label="Default select example">
@@ -45,7 +45,7 @@
                  let button = document.createElement("button");
                   button.type="submit";button.className="btn btn-primary";button.textContent = "Confirmer";
                 $.ajax({
-                    url: "../GetCamionDispo/",
+                    url: "../../Livraison/GetCamionDispo/",
                     type: 'GET',
                     data: { selectedChauffeurId: selectedChauffeurId,livraisonId:@Model.Livraison },
                     headers: { 'RequestVerificationToken': token },
