@@ -6,20 +6,7 @@
   Layout = "_Layout";  
     ViewData["Title"] = "ModificationClient";
 }
-@section Scripts {
-    <script>
-        function checkPassword() {
-            var motDePasse = document.getElementById('passwordUser').value;
-            var motDePasseConfirm = document.getElementById('passwordUserConfirm').value;
 
-            if (motDePasse !== motDePasseConfirm) {
-                alert("Les mots de passe ne correspondent pas.");
-                return false;
-            }
-            return true;
-        }
-    </script>
-}
 
 <div class="container">
     <h1 class="display-4">Modification profil - Client:</h1>
@@ -27,18 +14,6 @@
         <div class="form-group mb-3">
             <label for="entrepriseName">Nom de L'entreprise</label>
             <input type="text" class="form-control" id="entrepriseName" placeholder="Nom de l'entreprise" name="entrepriseName">
-        </div>
-        <div class="form-group mb-3">
-            <label for="email">Adresse Mail</label>
-            <input  type="email" class="form-control" id="mail" placeholder="Adresse mail" name="email">
-        </div>
-        <div class="form-group mb-3">
-            <label for="passwordUser">Mot de passe</label>
-            <input  type="password" class="form-control" id="passwordUser" placeholder="Mot de passe" name="passwordUser">
-        </div>
-        <div class="form-group mb-3">
-            <label for="passwordUserConfirm">Confirmation du mot de passe</label>
-            <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe" name="passwordUserConfirm">
         </div>
         <div class="form-group mb-3">
             <label for="adress">Adresse </label>

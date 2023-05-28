@@ -191,8 +191,8 @@ public class HomeController : Controller
     public async Task<IActionResult> Statistique(string searchString = "")
     {
         var livraisonParMarque = _context.Livraison.Include(l => l.CamionLivraison)
-            .Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Valide |
-                          liv.StatutLivraison == Models.Livraison.Statut.Rate).GroupBy(l => l.CamionLivraison.Marque)
+            .Where(liv => (liv.CamionLivraison != null) && (liv.StatutLivraison == Models.Livraison.Statut.Valide |
+                                                            liv.StatutLivraison == Models.Livraison.Statut.Rate)).GroupBy(l => l.CamionLivraison.Marque)
             .Select(group => new { Marque = group.Key.ToString(), Number = group.Count() }).ToDictionary(w=>w.Marque,z=>z.Number);
         var livraisonRateParChauffeur = _context.Livraison.Include(l => l.ChauffeurLivraison)
             .Where(liv => liv.StatutLivraison == Models.Livraison.Statut.Rate).GroupBy(l => l.ChauffeurLivraison)

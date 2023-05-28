@@ -255,6 +255,10 @@ public class AccountController : Controller
                 userCasted.Matricule = form["matricule"].FirstOrDefault();
 
             }
+            if (Enum.TryParse(form["divName"].FirstOrDefault(), out Dispatcher.NiveauEtude niveauEtude))
+            {
+                userCasted.NiveauEtudeMax = niveauEtude;
+            }
             if (profil != null && profil.Length > 0)
             {
                 var user = await userManager.GetUserAsync(User);
@@ -271,7 +275,6 @@ public class AccountController : Controller
                     await profil.CopyToAsync(stream);
                 }
                 userCasted.PhotoProfil = $"~/img/{newFileName}";
-
             }
             
             await userManager.UpdateAsync(userCasted);
