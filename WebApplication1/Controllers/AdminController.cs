@@ -166,14 +166,15 @@ public class AdminController:Controller
         {
             return RedirectToAction("GestionEffectif","Home");
         }
-        
-        var imgFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", camion.Img.TrimStart('~', '/'));
-
-        if (System.IO.File.Exists(imgFullPath))
+        if (camion.Img != null)
         {
-            System.IO.File.Delete(imgFullPath);
+            var imgFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", camion.Img.TrimStart('~', '/'));
+            if (System.IO.File.Exists(imgFullPath))
+            {
+                System.IO.File.Delete(imgFullPath);
+            }
         }
-        
+
         var livraisons = await _context.Livraison.Where(l => l.CamionLivraison.ID == camion.ID && l.StatutLivraison ==Models.Livraison.Statut.EnCours).ToListAsync();
         
         foreach(var livraison in livraisons)

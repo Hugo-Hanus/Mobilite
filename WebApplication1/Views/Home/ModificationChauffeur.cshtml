@@ -2,20 +2,7 @@
     Layout = "_Layout";  
     ViewData["Title"] = "Chauffeur Modification";
 }
-@section Scripts {
-    <script>
-        function checkPassword() {
-            var motDePasse = document.getElementById('passwordUser').value;
-            var motDePasseConfirm = document.getElementById('passwordUserConfirm').value;
 
-            if (motDePasse !== motDePasseConfirm) {
-                alert("Les mots de passe ne correspondent pas.");
-                return false;
-            }
-            return true;
-        }
-    </script>
-}
 <div class="container">
     <h1 class="display-4">Modification - Chauffeur:</h1>
     <form method="post" enctype="multipart/form-data" asp-controller="Account" asp-action="ModificationChauffeur" onsubmit="return checkPassword();">
@@ -23,29 +10,14 @@
                     <label for="matricule">Matricule</label>
                     <input type="text" class="form-control" id="matricule" placeholder="Matricule" name="matricule">
                 </div>
-                <div class="form-group mb-3">
-                    <label>Nom et Prénom</label>
-                    <div class="d-flex mb-3">
-                        <input type="text" class="form-control" id="name" placeholder="Nom" name="nom">
-                        <input type="text" class="form-control" id="surname" placeholder="Prénom" name="prenom">
-                    </div>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="mail">Adresse Mail</label>
-                    <input type="email" class="form-control" id="mail" placeholder="Adresse mail" name="email">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="passwordUser">Mot de passe</label>
-                    <input type="password" class="form-control" id="passwordUser" placeholder="Mot de passe" name="passwordUser">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="passwordUserConfirm">Confirmation du mot de passe</label>
-                    <input type="password" class="form-control" id="passwordUserConfirm" placeholder="Confirmation du mot de passe" name="passwordUserConfirm">
-                </div>
-                <div class="form-group mb-3" id="roleComplete">
-        
-                </div>
-                <div class="form-group mb-3">
+        <div class="form-group mb-3">
+            <label>Nom et Prénom</label>
+            <div class="d-flex mb-3">
+                <input type="text" class="form-control" id="name" placeholder="Nom" name="nom">
+                <input type="text" class="form-control" id="surname" placeholder="Prénom" name="prenom">
+            </div>
+        </div>
+        <div class="form-group mb-3">
                     <label for="birthdate">Date de Naissance</label>
                     <input type="date" class="form-control" id="birthdate" placeholder="Date de naissance" name="dateNaissance">
                 </div>

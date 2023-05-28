@@ -67,9 +67,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    endpoints.MapControllerRoute(
-        name: "account",
-        pattern: "{controller=Account}/{action=Connexion}");
 });
 
 using (var scope = app.Services.CreateScope())
