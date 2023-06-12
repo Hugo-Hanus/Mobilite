@@ -57,9 +57,13 @@ public class AccountController : Controller
         var mdp = client.MotDePasse;
         client.MotDePasse = null;
         client.UserName = client.NomEntreprise;
-        await userManager.CreateAsync(client, mdp);
-        await userManager.AddToRoleAsync(client, "Client"); 
-        await signInManager.SignInAsync(client, false); 
+        var created =await userManager.CreateAsync(client, mdp);
+        if (created.Succeeded)
+        {
+            await userManager.AddToRoleAsync(client, "Client"); 
+            await signInManager.SignInAsync(client, false); 
+        }
+
         
         return RedirectToAction("Index","Home");
     }
@@ -176,9 +180,12 @@ public class AccountController : Controller
 
             if (password.Equals(passwordConfirm))
             {
-                await userManager.CreateAsync(dispatcher, password);
-                await userManager.AddToRoleAsync(dispatcher, "Dispatcher");
-                await signInManager.SignInAsync(dispatcher, false);
+               var created= await userManager.CreateAsync(dispatcher, password);
+               if (created.Succeeded)
+               {
+                   await userManager.AddToRoleAsync(dispatcher, "Dispatcher");
+                   await signInManager.SignInAsync(dispatcher, false);
+               }
             }
             
         }else if (type.Equals("chauffeur"))
@@ -216,9 +223,12 @@ public class AccountController : Controller
             
             if (password.Equals(passwordConfirm))
             {
-                await userManager.CreateAsync(chauffeur, password);
-                await userManager.AddToRoleAsync(chauffeur, "Chauffeur");
-                await signInManager.SignInAsync(chauffeur, false);
+                var created = await userManager.CreateAsync(chauffeur, password);
+                if (created.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(chauffeur, "Chauffeur");
+                    await signInManager.SignInAsync(chauffeur, false);
+                }
             }
         }
         return RedirectToAction("Index","Home");
