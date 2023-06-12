@@ -8,141 +8,141 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WebApplication1
 build_property.RootNamespace = WebApplication1
-build_property.ProjectDir = C:\HELMO\2022\AI\HELMo-bilite\WebApplication1\
+build_property.ProjectDir = C:\Users\Timotei\Documents\WebAvancé\abc\HELMo-bilite\WebApplication1\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\HELMO\2022\AI\HELMo-bilite\WebApplication1
+build_property.MSBuildProjectDirectory = C:\Users\Timotei\Documents\WebAvancé\abc\HELMo-bilite\WebApplication1
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/AjouterCamion.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/AjouterCamion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBam91dGVyQ2FtaW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ClientListe.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ClientListe.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDbGllbnRMaXN0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Connexion.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/Connexion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb25uZXhpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/CreerLivraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/CreerLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDcmVlckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Dispatch.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/Dispatch.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEaXNwYXRjaC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ErrorPage.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ErrorPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxFcnJvclBhZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/GererLivraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/GererLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXJlckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/GestionEffectif.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/GestionEffectif.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXN0aW9uRWZmZWN0aWYuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Index.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/InscriptionClient.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/InscriptionClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbnNjcmlwdGlvbkNsaWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/InscriptionMembre.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/InscriptionMembre.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbnNjcmlwdGlvbk1lbWJyZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Livraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/Livraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMaXZyYWlzb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/LivraisonDispatch.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/LivraisonDispatch.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMaXZyYWlzb25EaXNwYXRjaC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ModificationCamion.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ModificationCamion.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25DYW1pb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ModificationChauffeur.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ModificationChauffeur.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25DaGF1ZmZldXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ModificationClient.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ModificationClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25DbGllbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ModificationDispatcher.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ModificationDispatcher.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmljYXRpb25EaXNwYXRjaGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ModifierLivraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ModifierLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxNb2RpZmllckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ProfilChauffeur.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ProfilChauffeur.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9maWxDaGF1ZmZldXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ProfilClient.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ProfilClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9maWxDbGllbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ProfilDispatcher.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ProfilDispatcher.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcm9maWxEaXNwYXRjaGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/RaterLivraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/RaterLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxSYXRlckxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/Statistique.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/Statistique.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdGF0aXN0aXF1ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Home/ValiderLivraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Home/ValiderLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWYWxpZGVyTGl2cmFpc29uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Modification/ModificationLivraison.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Modification/ModificationLivraison.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW9kaWZpY2F0aW9uXE1vZGlmaWNhdGlvbkxpdnJhaXNvbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/Error.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllChauffeurDispo.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllChauffeurDispo.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsQ2hhdWZmZXVyRGlzcG8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLivraisonToAttribute.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLivraisonToAttribute.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsTGl2cmFpc29uVG9BdHRyaWJ1dGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLogoClient.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Shared/ListElements/_AllLogoClient.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXExpc3RFbGVtZW50c1xfQWxsTG9nb0NsaWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/_ViewImports.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/_ViewStart.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/HELMO/2022/AI/HELMo-bilite/WebApplication1/Views/Shared/_Layout.cshtml]
+[C:/Users/Timotei/Documents/WebAvancé/abc/HELMo-bilite/WebApplication1/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-bddmc6yalx
