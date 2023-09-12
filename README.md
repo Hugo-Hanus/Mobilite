@@ -7,7 +7,7 @@ Pattern :
 Model - View - Controller | ASP .Net MVC
 
 Base de Donnée:
-MYSQL | Entity Framework
+MYSQL | Entity Framework | Linq
 
 Interface graphique :
 Bootstrap
